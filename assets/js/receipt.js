@@ -48,10 +48,16 @@
     y += 7;
     doc.setFontSize(16); doc.setTextColor(...INDIGO);
     doc.text("Registration Acknowledgement", W / 2, y, { align: "center" });
-    y += 5.5;
-    doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(...SLATE);
-    doc.text("Astronomy Course and Star Party Near Tansa", W / 2, y, { align: "center" });
-    y += 5;
+    y += 3;
+    // what they registered for, in bold, right under the heading
+    const what = d.programmes.course
+      ? "ASTRONOMY COURSE  (Star Party Near Tansa included)"
+      : "STAR PARTY NEAR TANSA (STARGAZING TRIP) ONLY";
+    doc.setFillColor(...(d.programmes.course ? INDIGO : GOLD));
+    doc.roundedRect(M + 22, y, CW - 44, 8, 2, 2, "F");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(11.5); doc.setTextColor(255, 255, 255);
+    doc.text(what, W / 2, y + 5.6, { align: "center" });
+    y += 11;
 
     // registration id block with QR code
     const qrText = ["BKBCK", d.id, d.fullName, d.amount, d.paymentMode, d.utr || "-"].join("|");
