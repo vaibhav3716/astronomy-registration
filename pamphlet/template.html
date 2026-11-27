@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Star Party Near Tansa | Department of Physics, B. K. Birla College, Kalyan</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --indigo: #1F2A6B; --night: #070B22; --teal: #00838F; --gold: #F5B845; --slate: #4f5b70; --pale: #eef1fb; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Fira Sans", sans-serif; color: #1d2233; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 210mm; height: 297mm; position: relative; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
+
+  /* college band */
+  .band { background: #fff; padding: 4mm 10mm 3mm; text-align: center; border-bottom: 1.2mm solid var(--gold); }
+  .band img { height: 21mm; }
+
+  /* hero */
+  .hero { position: relative; color: #fff; padding: 9mm 12mm 8mm; height: 118mm;
+          background: linear-gradient(180deg, rgba(7,11,34,.35), rgba(7,11,34,.55) 45%, rgba(7,11,34,.95)), url("../assets/img/hero-star-trails.jpg") center 35% / cover; }
+  .eyebrow { font-weight: 700; letter-spacing: .22em; font-size: 10.5pt; color: var(--gold); text-transform: uppercase; }
+  h1 { font-family: "Lora", serif; font-size: 46pt; line-height: .98; margin: 3mm 0 3mm; letter-spacing: -.5pt; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
+  h1 span { color: var(--gold); }
+  .tagline { font-size: 16pt; font-weight: 500; margin: 0 0 5mm; max-width: 150mm; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+  .tagline b { color: var(--gold); }
+  .chips { display: flex; flex-wrap: wrap; gap: 2.5mm; }
+  .chip { background: rgba(255,255,255,.14); border: .3mm solid rgba(255,255,255,.4); border-radius: 20mm; padding: 1.6mm 4mm; font-size: 11pt; font-weight: 500; }
+  .credit { position: absolute; right: 4mm; bottom: 2mm; font-size: 5.5pt; color: rgba(255,255,255,.55); }
+
+  /* body */
+  .body { flex: 1; padding: 6mm 12mm 0; display: flex; flex-direction: column; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .card { border-radius: 4mm; padding: 4.5mm 5mm; position: relative; }
+  .card.course { background: var(--pale); border: .5mm solid var(--indigo); }
+  .card.party { background: #fff8e6; border: .5mm solid var(--gold); }
+  .card h2 { margin: 0; font-size: 15pt; color: var(--indigo); }
+  .card .price { font-family: "Lora", serif; font-size: 25pt; font-weight: 700; color: var(--indigo); margin: .5mm 0 1.5mm; }
+  .card .price small { font-family: "Fira Sans"; font-size: 10pt; font-weight: 600; color: var(--teal); }
+  .card ul { margin: 0; padding-left: 4.5mm; font-size: 10.6pt; line-height: 1.38; }
+  .card li::marker { color: var(--teal); }
+  .badge { position: absolute; top: -3.2mm; right: 4mm; background: var(--indigo); color: #fff; font-size: 8.5pt; font-weight: 700; padding: .8mm 3mm; border-radius: 10mm; letter-spacing: .05em; }
+  .party .badge { background: var(--gold); color: var(--night); }
+
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 5mm 0 0; }
+  .fact { border-left: 1mm solid var(--teal); padding: 1mm 0 1mm 3mm; }
+  .fact span { display: block; font-size: 7.8pt; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; }
+  .fact b { font-size: 10.3pt; font-weight: 600; line-height: 1.25; display: block; }
+
+  .register { margin-top: auto; margin-bottom: 4mm; display: flex; align-items: center; gap: 6mm; background: var(--night); color: #fff; border-radius: 5mm; padding: 5mm 6mm; }
+  .qr { width: 40mm; height: 40mm; background: #fff; border-radius: 2.5mm; padding: 2mm; flex: none; }
+  .qr svg { width: 100%; height: 100%; display: block; }
+  .reg-text h3 { margin: 0 0 1.5mm; font-family: "Lora", serif; font-size: 22pt; color: var(--gold); }
+  .reg-text p { margin: 0 0 1.5mm; font-size: 10.8pt; line-height: 1.35; }
+  .url { font-family: ui-monospace, Menlo, monospace; font-size: 10pt; color: #9fe3e8; word-break: break-all; }
+  .note { font-size: 8.8pt; color: #c9cfef; }
+
+  .footer { background: var(--indigo); color: #e6e9fa; padding: 3.5mm 12mm; display: flex; justify-content: space-between; align-items: center; font-size: 9.2pt; }
+  .footer b { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="band"><img src="../assets/img/bkbc-logo.jpg" alt="B. K. Birla College of Arts, Science & Commerce, Kalyan"></div>
+
+  <div class="hero">
+    <div class="eyebrow">Department of Physics presents</div>
+    <h1>Star Party<br><span>Near Tansa</span></h1>
+    <p class="tagline">One night. A sky full of stars. Telescopes, games and guitars. <b>Come for the fun, leave knowing the sky.</b></p>
+    <div class="chips">
+      <span class="chip">&#128301; Saturn's rings &amp; Moon craters</span>
+      <span class="chip">&#127756; The Andromeda Galaxy</span>
+      <span class="chip">&#10024; Laser-guided sky tour</span>
+      <span class="chip">&#127942; Astronomy quiz</span>
+      <span class="chip">&#127928; Bring your guitar!</span>
+      <span class="chip">&#127922; Night games</span>
+    </div>
+    <div class="credit">Photo: International Gemini Observatory/NOIRLab/NSF/AURA/T. Matsopoulos (CC BY 4.0)</div>
+  </div>
+
+  <div class="body">
+    <div class="cards">
+      <div class="card course">
+        <span class="badge">LEARN + PARTY</span>
+        <h2>Astronomy Course</h2>
+        <div class="price">&#8377;1,000 <small>Star Party included</small></div>
+        <ul>
+          <li>Read the sky: constellations, stars, Moon phases, eclipses</li>
+          <li>Panchang, calendars and why festivals fall when they do</li>
+          <li>Use a real telescope: hands-on workshop</li>
+          <li>Certificate on attending lectures and the exam</li>
+        </ul>
+      </div>
+      <div class="card party">
+        <span class="badge">JUST THE NIGHT</span>
+        <h2>Star Party only</h2>
+        <div class="price">&#8377;1,000</div>
+        <ul>
+          <li>A night under a dark rural sky near Tansa</li>
+          <li>Telescope views of planets, star clusters and nebulae</li>
+          <li>Find constellations and their Indian names</li>
+          <li>Quiz, night games and a guitar sing-along</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><span>Date</span><b>{{DATE}}</b></div>
+      <div class="fact"><span>Venue</span><b>Near Atma Malik Institute, Mohili-Aghai, Shahapur</b></div>
+      <div class="fact"><span>Travel</span><b>Bus from college</b></div>
+      <div class="fact"><span>Open to</span><b>Students 16+, in-house &amp; other colleges</b></div>
+    </div>
+
+    <div class="register">
+      <div class="qr">{{QR_SVG}}</div>
+      <div class="reg-text">
+        <h3>Limited seats. Register now!</h3>
+        <p>Scan the QR code, fill in the form and pay online (UPI) or in cash at the Physics Department.</p>
+        <p class="url">{{URL}}</p>
+        <p class="note">Bring the printed acknowledgement and the parental consent form signed by your parent or guardian to the Physics Department.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Organised by the <b>Department of Physics</b>, B. K. Birla College of Arts, Science &amp; Commerce, Kalyan</span>
+    <span>{{CONTACT}}</span>
+  </div>
+</div>
+</body>
+</html>
