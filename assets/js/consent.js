@@ -25,7 +25,7 @@
     doc.text("Parent / Guardian Consent Form", W / 2, y, { align: "center" });
     y += 5;
     doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(...SLATE);
-    doc.text("Night-Sky Stargazing Trip  |  Registration ID: " + d.id, W / 2, y, { align: "center" });
+    doc.text("Star Party Near Tansa  |  Registration ID: " + d.id, W / 2, y, { align: "center" });
     y += 5;
 
     // student and trip details (pre-filled)
@@ -52,7 +52,7 @@
     // consent statement
     doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(25, 30, 50);
     const para = "I, ____________________________________ (Parent / Guardian), give my consent for my ward " + d.fullName +
-      " to take part in the Night-Sky Stargazing Trip organised by the Department of Physics, B. K. Birla College of Arts, Science & Commerce, Kalyan, " +
+      " to take part in the Star Party Near Tansa organised by the Department of Physics, B. K. Birla College of Arts, Science & Commerce, Kalyan, " +
       "including the night spent outdoors at the observing site and travel to and from the site by bus from the college. " +
       "My ward and I have read and agree to the following:";
     const pl = doc.splitTextToSize(para, CW);
@@ -104,7 +104,7 @@
 
     doc.setFont("helvetica", "bold"); doc.setFontSize(9.2); doc.setTextColor(200, 40, 40);
     const note = doc.splitTextToSize("Submit this form, signed by your parent or guardian, together with the printed acknowledgement at the Physics Department within " +
-      cfg.submitWithinDays + " days. Until both are submitted, you are not registered for the stargazing trip.", CW);
+      cfg.submitWithinDays + " days. Until both are submitted, you are not registered for the Star Party.", CW);
     doc.text(note, W / 2, y, { align: "center" });
 
     if (d.test) {

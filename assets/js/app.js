@@ -31,6 +31,8 @@
   /* ---------- dynamic parts of the form ---------- */
   // the course package includes the stargazing trip
   const isCourse = () => form.programme.value === "course";
+  // teachers register without Class / Year, Student ID, parent details or the consent form
+  const isTeacher = () => form.role.value === "teacher";
   const total = () => isCourse() ? fees.course : (form.programme.value === "trip" ? fees.trip : 0);
 
   function upiUri(amount) {
@@ -60,10 +62,19 @@
     $("#comboNote").hidden = !isCourse();
     $("#certNote").hidden = !isCourse();
     $("#collegeNameField").hidden = form.collegeType.value !== "outside";
+    $("#classYearField").hidden = isTeacher();
+    $("#studentIdField").hidden = isTeacher();
+    $("#guardianFields").hidden = isTeacher();
+    showRole(form, isTeacher());
     const mode = form.paymentMode.value;
     $("#onlineBlock").hidden = mode !== "online";
     $("#cashBlock").hidden = mode !== "cash";
     if (mode === "online") drawPayQR(t);
+  }
+  // show the student or the teacher wording inside an element
+  function showRole(root, teacher) {
+    $$(".only-student", root).forEach(e => e.hidden = teacher);
+    $$(".only-teacher", root).forEach(e => e.hidden = !teacher);
   }
   form.addEventListener("input", update);
   form.addEventListener("change", update);
@@ -127,6 +138,7 @@
       form.querySelector("input[name=programme][value=course]").checked = true;
       set("fullName", "Riya Sharma"); set("age", "19"); set("gender", "Female"); set("phone", "9876543210");
       set("email", "riya.sharma@example.com");
+      form.querySelector("input[name=role][value=student]").checked = true;
       form.querySelector("input[name=collegeType][value=inhouse]").checked = true;
       set("classYear", "FY BSc"); set("department", "Physics"); set("studentId", "BKB2026-0421"); set("city", "Kalyan West");
       set("guardianName", "Sunil Sharma"); set("guardianPhone", "9123456780");
@@ -155,21 +167,24 @@
     const v = n => (form.elements[n].value || "").trim();
     const phoneOK = s => /^[6-9]\d{9}$/.test(s);
 
-    if (!form.programme.value) { errs.push("Choose the Astronomy Course package or the Stargazing Trip only."); $('[data-error="programme"]').textContent = "Choose an option."; }
+    if (!form.programme.value) { errs.push("Choose the Astronomy Course package or the Star Party only."); $('[data-error="programme"]').textContent = "Choose an option."; }
     if (v("fullName").length < 3) bad("fullName", "Enter your full name.");
     const age = parseInt(v("age"), 10);
     if (!age) bad("age", "Enter your age.");
     else if (age < cfg.minAge) bad("age", `The minimum age is ${cfg.minAge} years.`);
     if (!phoneOK(v("phone"))) bad("phone", "Enter a valid 10-digit mobile number.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email"))) bad("email", "Enter a valid email address.");
+    if (!form.role.value) { errs.push("Choose whether you are a student or a teacher."); $('[data-error="role"]').textContent = "Choose one."; }
     if (!form.collegeType.value) { errs.push("Choose whether you are from B. K. Birla College or from another college."); $('[data-error="collegeType"]').textContent = "Choose one."; }
     if (form.collegeType.value === "outside" && v("collegeName").length < 3) bad("collegeName", "Enter the name of your college.");
-    if (!v("classYear")) bad("classYear", "Enter your Class / Year.");
+    if (!isTeacher() && !v("classYear")) bad("classYear", "Enter your Class / Year.");
     if (!v("department")) bad("department", "Enter your Department / Stream.");
     if (!v("city")) bad("city", "Enter your city or area.");
-    if (v("guardianName").length < 3) bad("guardianName", "Enter your parent or guardian's name.");
-    if (!phoneOK(v("guardianPhone"))) bad("guardianPhone", "Enter your parent or guardian's 10-digit mobile number.");
-    else if (v("guardianPhone") === v("phone")) bad("guardianPhone", "Your parent or guardian's number must be different from your own.");
+    if (!isTeacher()) {
+      if (v("guardianName").length < 3) bad("guardianName", "Enter your parent or guardian's name.");
+      if (!phoneOK(v("guardianPhone"))) bad("guardianPhone", "Enter your parent or guardian's 10-digit mobile number.");
+      else if (v("guardianPhone") === v("phone")) bad("guardianPhone", "Your parent or guardian's number must be different from your own.");
+    }
     const mode = form.paymentMode.value;
     if (!mode) { errs.push("Choose a payment method: online (UPI) or cash."); $('[data-error="paymentMode"]').textContent = "Choose a payment method."; }
     if (mode === "online") {
@@ -200,13 +215,15 @@
     const val = n => (form.elements[n] ? form.elements[n].value || "" : "").trim();
     const online = form.paymentMode.value === "online";
     const inhouse = form.collegeType.value === "inhouse";
+    const teacher = isTeacher();
     const data = {
       fullName: val("fullName"), age: val("age"), gender: val("gender"), phone: val("phone"), email: val("email"),
+      role: teacher ? "Teacher" : "Student",
       collegeType: inhouse ? "In-house" : "Outside",
       institution: inhouse ? HOME_COLLEGE : val("collegeName"),
-      classYear: val("classYear"), department: val("department"), studentId: val("studentId"), city: val("city"),
+      classYear: teacher ? "" : val("classYear"), department: val("department"), studentId: teacher ? "" : val("studentId"), city: val("city"),
       programmes: { course: isCourse(), trip: true }, amount: total(),
-      guardianName: val("guardianName"), guardianPhone: val("guardianPhone"), medical: val("medical"),
+      guardianName: teacher ? "" : val("guardianName"), guardianPhone: teacher ? "" : val("guardianPhone"), medical: val("medical"),
       paymentMode: form.paymentMode.value,
       utr: online ? val("utr") : "", payerName: online ? val("payerName") : "",
       screenshotName: "", submittedAt: nowText(), test: TEST
@@ -261,7 +278,7 @@
   function makeDocs(data) {
     docs = {
       ack: window.buildAcknowledgement(data, logoDataUrl), ackName: "Acknowledgement_" + data.id + ".pdf",
-      consent: window.buildConsentForm(data, logoDataUrl), consentName: "Parental_Consent_Form_" + data.id + ".pdf"
+      consent: data.role === "Teacher" ? null : window.buildConsentForm(data, logoDataUrl), consentName: "Parental_Consent_Form_" + data.id + ".pdf"
     };
   }
   function refreshModal() {
@@ -269,13 +286,17 @@
     $("#consentDownload").classList.toggle("done", got.consent);
     $("#ackClose").disabled = !allGot();
     $("#ackCloseHint").textContent = allGot()
-      ? "Both downloaded. Print the acknowledgement and get the consent form signed by your parent or guardian."
-      : "You can close this window after downloading both.";
+      ? (docs.consent ? "Both downloaded. Print the acknowledgement and get the consent form signed by your parent or guardian." : "Downloaded. Print it and bring it to the Physics Department.")
+      : (docs.consent ? "You can close this window after downloading both." : "You can close this window after downloading.");
   }
   function finish(data) {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(Object.assign({}, data, { screenshotImage: null }))); } catch (_) {}
     makeDocs(data);
-    got = { ack: false, consent: false };
+    const teacher = data.role === "Teacher";
+    got = { ack: false, consent: teacher };   // teachers have no consent form
+    $("#consentDownload").hidden = teacher;
+    $("#ackDownload").textContent = teacher ? "Download acknowledgement (PDF)" : "1. Download acknowledgement (PDF)";
+    showRole($("#ackModal"), teacher);
     form.reset(); update();
     $$("input, select, button", form).forEach(el => el.disabled = true);
     $("#ackId").textContent = data.id;
@@ -306,7 +327,8 @@
     $("#prevId").textContent = prev.id;
     $("#previousBanner").hidden = false;
     $("#prevDownload").onclick = () => { makeDocs(prev); docs.ack.save(docs.ackName); };
-    $("#prevConsent").onclick = () => { makeDocs(prev); docs.consent.save(docs.consentName); };
+    $("#prevConsent").onclick = () => { makeDocs(prev); if (docs.consent) docs.consent.save(docs.consentName); };
+    $("#prevConsent").hidden = prev.role === "Teacher";
   }
   showPrevious();
   update();

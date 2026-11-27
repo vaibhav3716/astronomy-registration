@@ -9,10 +9,10 @@
   function programmesText(p) {
     const cfg = window.SITE_CONFIG;
     return p.course
-      ? "Astronomy Course package, Stargazing Trip included (" + rs(cfg.fees.course) + ")"
-      : "Stargazing Trip only (" + rs(cfg.fees.trip) + ")";
+      ? "Astronomy Course package, Star Party Near Tansa included (" + rs(cfg.fees.course) + ")"
+      : "Star Party Near Tansa only (" + rs(cfg.fees.trip) + ")";
   }
-  function programmesShort(p) { return p.course ? "Astronomy Course package (trip included)" : "Stargazing Trip only"; }
+  function programmesShort(p) { return p.course ? "Astronomy Course package (Star Party included)" : "Star Party only"; }
 
   // draw a QR code as vector squares (crisp when printed)
   function drawQR(doc, text, x, y, size) {
@@ -50,7 +50,7 @@
     doc.text("Registration Acknowledgement", W / 2, y, { align: "center" });
     y += 5.5;
     doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(...SLATE);
-    doc.text("Astronomy Course and Night-Sky Stargazing Trip", W / 2, y, { align: "center" });
+    doc.text("Astronomy Course and Star Party Near Tansa", W / 2, y, { align: "center" });
     y += 5;
 
     // registration id block with QR code
@@ -78,13 +78,14 @@
       ["Mobile", d.phone],
       ["Email", d.email],
       ["College", (d.collegeType === "In-house" ? "In-house: " : "Outside: ") + d.institution],
-      ["Class / Department", d.classYear + ", " + d.department + (d.studentId ? "   (Student ID: " + d.studentId + ")" : "")],
+      d.role === "Teacher" ? ["Role / Department", "Teacher, " + d.department]
+        : ["Class / Department", d.classYear + ", " + d.department + (d.studentId ? "   (Student ID: " + d.studentId + ")" : "")],
       ["City / Area", d.city],
       ["Programme", programmesText(d.programmes)],
     ];
     if (d.programmes.course) rows.push(["Certificate", "Given after attending the lectures and appearing for the exam"]);
-    rows.push(["Parent / Guardian", d.guardianName + ", " + d.guardianPhone + " (emergency contact)"]);
-    rows.push(["Stargazing trip", "Travel: bus from college" + (d.medical ? "   |  Medical: " + d.medical : "")]);
+    if (d.role !== "Teacher") rows.push(["Parent / Guardian", d.guardianName + ", " + d.guardianPhone + " (emergency contact)"]);
+    rows.push(["Star Party", "Travel: bus from college" + (d.medical ? "   |  Medical: " + d.medical : "")]);
     if (d.paymentMode === "online") {
       rows.push(["UPI transaction ID", d.utr + (d.payerName ? "   (paid from: " + d.payerName + ")" : "")]);
       rows.push(["Screenshot uploaded", d.screenshotName || "-"]);
@@ -142,7 +143,13 @@
          "The office will check your UPI payment, sign the box above, keep this page and the consent form, and return the student's copy below with your receipt."]
       : ["Bring the PRINTOUT of this acknowledgement, the PARENTAL CONSENT FORM signed by your parent or guardian, and " + rs(d.amount) + " in cash to the " + cfg.cash.place + " (" + cfg.cash.timing + ") within " + cfg.submitWithinDays + " days.",
          "The clerk will sign the box above, keep this page and the consent form, and return the student's copy below with your fee receipt."];
-    steps.push("Until both the acknowledgement and the signed consent form are submitted, you are NOT registered for the stargazing trip.");
+    if (d.role === "Teacher") {
+      steps[0] = steps[0].replace(" and the PARENTAL CONSENT FORM signed by your parent or guardian", "").replace(", the PARENTAL CONSENT FORM signed by your parent or guardian,", "");
+      steps[1] = steps[1].replace(" and the consent form", "");
+      steps.push("Your registration is complete once the office signs the box above.");
+    } else {
+      steps.push("Until both the acknowledgement and the signed consent form are submitted, you are NOT registered for the Star Party.");
+    }
     steps.forEach((s, i) => {
       const lines = doc.splitTextToSize((i + 1) + ". " + s, CW);
       doc.text(lines, M, y); y += lines.length * 4.1 + 0.8;

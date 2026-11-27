@@ -21,7 +21,7 @@ const CONFIG = {
 };
 
 const HEADERS = [
-  'Registration ID', 'Submitted at', 'Full name', 'Age', 'Gender', 'Mobile', 'Email',
+  'Registration ID', 'Submitted at', 'Student / Teacher', 'Full name', 'Age', 'Gender', 'Mobile', 'Email',
   'In-house / Outside', 'College', 'Class / Year', 'Department / Stream', 'Student ID', 'City / Area',
   'Course package', 'Trip', 'Amount (Rs)', 'Payment mode', 'UPI transaction ID', 'Paid from', 'Screenshot',
   'Parent / Guardian', 'Parent / Guardian mobile', 'Medical notes',
@@ -65,11 +65,11 @@ function doPost(e) {
 
     const submittedAt = Utilities.formatDate(new Date(), 'Asia/Kolkata', 'dd MMM yyyy, hh:mm a');
     sheet.appendRow([
-      id, submittedAt, safe_(d.fullName), d.age, safe_(d.gender), "'" + d.phone, safe_(d.email),
+      id, submittedAt, d.role === 'Teacher' ? 'Teacher' : 'Student', safe_(d.fullName), d.age, safe_(d.gender), "'" + d.phone, safe_(d.email),
       safe_(d.collegeType), safe_(d.institution), safe_(d.classYear), safe_(d.department), safe_(d.studentId), safe_(d.city),
       d.programmes.course ? 'Yes' : '', 'Yes', amount,
       d.paymentMode === 'online' ? 'Online (UPI)' : 'Cash', d.utr ? "'" + d.utr : '', safe_(d.payerName), fileCell,
-      safe_(d.guardianName), "'" + d.guardianPhone, safe_(d.medical),
+      safe_(d.guardianName), d.guardianPhone ? "'" + d.guardianPhone : '', safe_(d.medical),
       '', '', '', '', ''
     ]);
     return json_({ ok: true, id: id, submittedAt: submittedAt, amount: amount, fileName: fileName });
@@ -88,8 +88,9 @@ function validate_(d) {
   if (!age || age < CONFIG.MIN_AGE) return 'The minimum age is ' + CONFIG.MIN_AGE + ' years.';
   if (!phone.test(d.phone)) return 'Mobile number is not valid.';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email || '')) return 'Email address is not valid.';
-  if (!d.institution || !d.classYear || !d.department) return 'College, class and department are needed.';
-  if (!d.guardianName || !phone.test(d.guardianPhone || '')) return 'Parent or guardian name and mobile are needed.';
+  const teacher = d.role === 'Teacher';
+  if (!d.institution || !d.department || (!teacher && !d.classYear)) return 'College, class and department are needed.';
+  if (!teacher && (!d.guardianName || !phone.test(d.guardianPhone || ''))) return 'Parent or guardian name and mobile are needed.';
   if (d.paymentMode !== 'online' && d.paymentMode !== 'cash') return 'Choose a payment method.';
   if (d.paymentMode === 'online') {
     if (!/^\d{12}$/.test(d.utr || '')) return 'The UPI transaction ID must be 12 digits.';

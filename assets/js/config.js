@@ -29,7 +29,7 @@ window.SITE_CONFIG = {
   },
 
   trip: {
-    title: "Night-Sky Stargazing Trip",
+    title: "Star Party Near Tansa",
     date: "19th December, 2026",
     place: "Atma Malik Institute of Technology & Research, Mohili-Aghai, Shahapur (Thane district)",
     mapUrl: "https://share.google/LEMSChtrACBpUne1e",
