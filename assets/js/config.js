@@ -5,7 +5,7 @@ window.SITE_CONFIG = {
   // Google Apps Script web-app URL that saves registrations to your Google Sheet
   // (see README.md, step 2). While this is empty the site runs in TEST MODE:
   // nothing is saved and every acknowledgement is stamped "TEST".
-  appsScriptUrl: "",
+  appsScriptUrl: "https://script.google.com/macros/s/AKfycbzgfLz8igjJJutVNDJcDZK8pWJmCDX8lrkgFMJd0Piw-ikoe9X_JB7W_FxhkuysL3y8/exec",
 
   // UPI details for online payment (to be filled in later).
   //  - id:      your UPI ID, e.g. "physicsdept@okaxis". If given, the site draws a QR code

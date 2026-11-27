@@ -217,15 +217,17 @@
     const inhouse = form.collegeType.value === "inhouse";
     const teacher = isTeacher();
     const data = {
-      fullName: val("fullName"), age: val("age"), gender: val("gender"), phone: val("phone"), email: val("email"),
+      // everything is put into a proper format before it is saved or printed (see format.js)
+      fullName: FMT.name(val("fullName")), age: FMT.digits(val("age")), gender: val("gender"), phone: FMT.digits(val("phone")), email: FMT.lower(val("email")),
       role: teacher ? "Teacher" : "Student",
       collegeType: inhouse ? "In-house" : "Outside",
-      institution: inhouse ? HOME_COLLEGE : val("collegeName"),
-      classYear: teacher ? "" : val("classYear"), department: val("department"), studentId: teacher ? "" : val("studentId"), city: val("city"),
+      institution: inhouse ? HOME_COLLEGE : FMT.title(val("collegeName")),
+      classYear: teacher ? "" : FMT.classYear(val("classYear")), department: FMT.title(val("department")),
+      studentId: teacher ? "" : FMT.upper(val("studentId")), city: FMT.name(val("city")),
       programmes: { course: isCourse(), trip: true }, amount: total(),
-      guardianName: teacher ? "" : val("guardianName"), guardianPhone: teacher ? "" : val("guardianPhone"), medical: val("medical"),
+      guardianName: teacher ? "" : FMT.name(val("guardianName")), guardianPhone: teacher ? "" : FMT.digits(val("guardianPhone")), medical: FMT.sentence(val("medical")),
       paymentMode: form.paymentMode.value,
-      utr: online ? val("utr") : "", payerName: online ? val("payerName") : "",
+      utr: online ? FMT.digits(val("utr")) : "", payerName: online ? FMT.name(val("payerName")) : "",
       screenshotName: "", submittedAt: nowText(), test: TEST
     };
     const submitBtn = $("#submitBtn");
