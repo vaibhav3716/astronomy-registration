@@ -3,7 +3,7 @@
      node build_pamphlet.js "https://USERNAME.github.io/astronomy-registration/" "19th December, 2026" "Contact: Name, 9XXXXXXXXX" [google-maps-link]
    Needs Google Chrome installed (used to turn the page into PDF / PNG). */
 const fs = require("fs"), path = require("path"), vm = require("vm"), { execFileSync } = require("child_process");
-const [url = "https://USERNAME.github.io/astronomy-registration/", date = "19th December, 2026", contact = "", mapUrl = "https://share.google/LEMSChtrACBpUne1e"] = process.argv.slice(2);
+const [url = "https://vaibhav3716.github.io/astronomy-registration/", date = "19th December, 2026", contact = "", mapUrl = "https://share.google/LEMSChtrACBpUne1e"] = process.argv.slice(2);
 const here = __dirname;
 
 // QR code as SVG, using the same qrcode-generator library as the website

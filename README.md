@@ -61,7 +61,7 @@ This keeps the same URL.
    ```
 3. On GitHub open **Settings > Pages**, set *Source* to **Deploy from a branch**, branch **main**,
    folder **/ (root)**, and save.
-4. After about a minute the site is live at `https://YOUR-USERNAME.github.io/astronomy-registration/`.
+4. After about a minute the site is live at `https://vaibhav3716.github.io/astronomy-registration/`.
 
 To update the site later, edit the files, then run `git add . && git commit -m "Update" && git push`.
 
