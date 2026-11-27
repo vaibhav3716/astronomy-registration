@@ -30,8 +30,8 @@ window.SITE_CONFIG = {
 
   trip: {
     title: "Night-Sky Stargazing Trip",
-    date: "To be announced",
-    place: "Near Atma Malik Institute of Technology & Research, Mohili-Aghai, Shahapur (Thane district)",
+    date: "19th December, 2026",
+    place: "Atma Malik Institute of Technology & Research, Mohili-Aghai, Shahapur (Thane district)",
     mapUrl: "https://share.google/LEMSChtrACBpUne1e",
     reporting: "Reporting time at the college will be shared on WhatsApp"
   },

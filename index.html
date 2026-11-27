@@ -38,7 +38,7 @@
   <div class="wrap hero-content">
     <p class="eyebrow">Department of Physics &middot; B. K. Birla College, Kalyan</p>
     <h1>Look up. Learn the sky.</h1>
-    <p class="lead">An <strong>Astronomy Course</strong> for curious minds aged 16+ and a <strong>Night-Sky Stargazing Trip</strong> away from city lights. The course package includes the trip.</p>
+    <p class="lead">An <strong>Astronomy Course</strong> open to all students and teachers, and a <strong>Night-Sky Stargazing Trip</strong> away from city lights. The course package includes the trip.</p>
     <div class="hero-cards">
       <a href="#course" class="hero-pill combo"><span class="pill-icon">&#9733;</span><span><b>Astronomy Course package</b><small>&#8377;<span data-fee="course"></span> &middot; stargazing trip included</small></span></a>
       <a href="#trip" class="hero-pill"><span class="pill-icon">&#10022;</span><span><b>Stargazing Trip only</b><small>&#8377;<span data-fee="trip"></span></small></span></a>
@@ -64,6 +64,7 @@
     <p class="section-lead">A beginner-friendly course that takes you from <em>"why do the stars move?"</em> to setting up a telescope and finding galaxies on your own. No prior astronomy is needed: Class 10 maths is enough, and every calculation has a worked example.</p>
 
     <div class="facts">
+      <div><span>Open to</span><b>All students and teachers</b></div>
       <div><span>Starts</span><b data-text="course.start"></b></div>
       <div><span>Format</span><b data-text="course.schedule"></b></div>
       <div><span>Venue</span><b data-text="course.venue"></b></div>
@@ -140,6 +141,7 @@
     <div class="facts facts-dark">
       <div><span>Date</span><b data-text="trip.date"></b></div>
       <div><span>Place</span><b><span data-text="trip.place"></span><br><a id="mapLink" class="map-link" href="#" target="_blank" rel="noopener" hidden>&#128205; Open in Google Maps</a></b></div>
+      <div><span>Open to</span><b>All students and teachers</b></div>
       <div><span>Travel</span><b>Bus from college</b></div>
       <div><span>Seats</span><b>Limited seats</b></div>
       <div><span>Fee</span><b>&#8377;<span data-fee="trip"></span></b></div>
@@ -248,11 +250,11 @@
         <div class="choice-grid">
           <label class="choice">
             <input type="radio" name="collegeType" value="inhouse">
-            <span class="choice-card"><b>In-house</b><small>Student of B. K. Birla College, Kalyan</small></span>
+            <span class="choice-card"><b>In-house</b><small>From B. K. Birla College, Kalyan</small></span>
           </label>
           <label class="choice">
             <input type="radio" name="collegeType" value="outside">
-            <span class="choice-card"><b>Outside B. K. Birla College</b><small>Student of another college</small></span>
+            <span class="choice-card"><b>Outside B. K. Birla College</b><small>From another college</small></span>
           </label>
         </div>
         <p class="field-error" data-error="collegeType"></p>
@@ -261,7 +263,7 @@
             <input type="text" name="collegeName" maxlength="120" placeholder="Full name of your college and city">
           </label>
           <label class="field">Class / Year <em>*</em>
-            <input type="text" name="classYear" required maxlength="40" placeholder="e.g. FY BSc, SY BCom">
+            <input type="text" name="classYear" required maxlength="40" placeholder="e.g. FY BSc, SY BCom, or Teacher">
           </label>
           <label class="field">Department / Stream <em>*</em>
             <input type="text" name="department" required maxlength="60" placeholder="e.g. Physics, Computer Science">

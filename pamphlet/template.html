@@ -13,45 +13,49 @@
   .page { width: 210mm; height: 297mm; position: relative; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
 
   /* college band */
-  .band { background: #fff; padding: 4mm 10mm 3mm; text-align: center; border-bottom: 1.2mm solid var(--gold); }
-  .band img { height: 21mm; }
+  .band { background: #fff; padding: 3mm 10mm 2.5mm; text-align: center; border-bottom: 1.2mm solid var(--gold); }
+  .band img { height: 19mm; }
 
   /* hero */
-  .hero { position: relative; color: #fff; padding: 9mm 12mm 8mm; height: 118mm;
+  .hero { position: relative; color: #fff; padding: 5mm 12mm 5.5mm;
           background: linear-gradient(180deg, rgba(7,11,34,.35), rgba(7,11,34,.55) 45%, rgba(7,11,34,.95)), url("../assets/img/hero-star-trails.jpg") center 35% / cover; }
   .eyebrow { font-weight: 700; letter-spacing: .22em; font-size: 10.5pt; color: var(--gold); text-transform: uppercase; }
-  h1 { font-family: "Lora", serif; font-size: 46pt; line-height: .98; margin: 3mm 0 3mm; letter-spacing: -.5pt; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
-  h1 span { color: var(--gold); }
-  .tagline { font-size: 16pt; font-weight: 500; margin: 0 0 5mm; max-width: 150mm; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+  h1 { font-family: "Lora", serif; line-height: .92; margin: 1mm 0 2.5mm; letter-spacing: -.5pt; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
+  h1 .line { display: inline-block; white-space: nowrap; font-size: 60pt; }
+  h1 .gold { color: var(--gold); }
+  .tagline { font-size: 14pt; font-weight: 500; margin: 0 0 3.5mm; max-width: 150mm; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
   .tagline b { color: var(--gold); }
   .chips { display: flex; flex-wrap: wrap; gap: 2.5mm; }
-  .chip { background: rgba(255,255,255,.14); border: .3mm solid rgba(255,255,255,.4); border-radius: 20mm; padding: 1.6mm 4mm; font-size: 11pt; font-weight: 500; }
-  .credit { position: absolute; right: 4mm; bottom: 2mm; font-size: 5.5pt; color: rgba(255,255,255,.55); }
+  .chip { background: rgba(255,255,255,.14); border: .3mm solid rgba(255,255,255,.4); border-radius: 20mm; padding: 1.3mm 3.4mm; font-size: 10pt; font-weight: 500; }
+  .credit { position: absolute; right: 4mm; bottom: 1mm; font-size: 5.5pt; color: rgba(255,255,255,.55); }
 
   /* body */
   .body { flex: 1; padding: 6mm 12mm 0; display: flex; flex-direction: column; }
   .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
-  .card { border-radius: 4mm; padding: 4.5mm 5mm; position: relative; }
+  .card { border-radius: 4mm; padding: 4mm 5mm 3.5mm; position: relative; }
   .card.course { background: var(--pale); border: .5mm solid var(--indigo); }
   .card.party { background: #fff8e6; border: .5mm solid var(--gold); }
   .card h2 { margin: 0; font-size: 15pt; color: var(--indigo); }
-  .card .price { font-family: "Lora", serif; font-size: 25pt; font-weight: 700; color: var(--indigo); margin: .5mm 0 1.5mm; }
+  .card .price { font-family: "Lora", serif; font-size: 22pt; font-weight: 700; color: var(--indigo); margin: .5mm 0 1.5mm; }
   .card .price small { font-family: "Fira Sans"; font-size: 10pt; font-weight: 600; color: var(--teal); }
-  .card ul { margin: 0; padding-left: 4.5mm; font-size: 10.6pt; line-height: 1.38; }
+  .card ul { margin: 0; padding-left: 4.5mm; font-size: 10pt; line-height: 1.32; }
   .card li::marker { color: var(--teal); }
   .badge { position: absolute; top: -3.2mm; right: 4mm; background: var(--indigo); color: #fff; font-size: 8.5pt; font-weight: 700; padding: .8mm 3mm; border-radius: 10mm; letter-spacing: .05em; }
   .party .badge { background: var(--gold); color: var(--night); }
 
-  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 5mm 0 0; }
+  .facts { display: grid; grid-template-columns: 1.1fr 1.5fr 1fr 1.1fr; gap: 3mm; margin: 4mm 0 6mm; }
   .fact { border-left: 1mm solid var(--teal); padding: 1mm 0 1mm 3mm; }
   .fact span { display: block; font-size: 7.8pt; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; }
   .fact b { font-size: 10.3pt; font-weight: 600; line-height: 1.25; display: block; }
 
-  .register { margin-top: auto; margin-bottom: 4mm; display: flex; align-items: center; gap: 6mm; background: var(--night); color: #fff; border-radius: 5mm; padding: 5mm 6mm; }
-  .qr { width: 40mm; height: 40mm; background: #fff; border-radius: 2.5mm; padding: 2mm; flex: none; }
+  .register { margin-top: auto; margin-bottom: 4mm; display: flex; align-items: center; gap: 5mm; background: var(--night); color: #fff; border-radius: 5mm; padding: 4mm 6mm; }
+  .qr-col { flex: none; text-align: center; font-size: 8.5pt; font-weight: 600; color: var(--gold); }
+  .qr-col span { display: block; margin-top: 1.5mm; }
+  .qr { width: 31mm; height: 31mm; background: #fff; border-radius: 2.5mm; padding: 2mm; }
+  .qr-col.small .qr { width: 25mm; height: 25mm; }
   .qr svg { width: 100%; height: 100%; display: block; }
-  .reg-text h3 { margin: 0 0 1.5mm; font-family: "Lora", serif; font-size: 22pt; color: var(--gold); }
-  .reg-text p { margin: 0 0 1.5mm; font-size: 10.8pt; line-height: 1.35; }
+  .reg-text h3 { margin: 0 0 1.5mm; font-family: "Lora", serif; font-size: 18pt; color: var(--gold); }
+  .reg-text p { margin: 0 0 1.2mm; font-size: 10pt; line-height: 1.35; }
   .url { font-family: ui-monospace, Menlo, monospace; font-size: 10pt; color: #9fe3e8; word-break: break-all; }
   .note { font-size: 8.8pt; color: #c9cfef; }
 
@@ -65,7 +69,7 @@
 
   <div class="hero">
     <div class="eyebrow">Department of Physics presents</div>
-    <h1>Star Party<br><span>Near Tansa</span></h1>
+    <h1 id="headline"><span class="line">Star Party</span><br><span class="line gold">Near Tansa</span></h1>
     <p class="tagline">One night. A sky full of stars. Telescopes, games and guitars. <b>Come for the fun, leave knowing the sky.</b></p>
     <div class="chips">
       <span class="chip">&#128301; Saturn's rings &amp; Moon craters</span>
@@ -106,19 +110,20 @@
 
     <div class="facts">
       <div class="fact"><span>Date</span><b>{{DATE}}</b></div>
-      <div class="fact"><span>Venue</span><b>Near Atma Malik Institute, Mohili-Aghai, Shahapur</b></div>
+      <div class="fact"><span>Venue</span><b>Atma Malik Institute of Technology &amp; Research, Mohili-Aghai, Shahapur</b></div>
       <div class="fact"><span>Travel</span><b>Bus from college</b></div>
-      <div class="fact"><span>Open to</span><b>Students 16+, in-house &amp; other colleges</b></div>
+      <div class="fact"><span>Open to</span><b>All students and teachers</b></div>
     </div>
 
     <div class="register">
-      <div class="qr">{{QR_SVG}}</div>
+      <div class="qr-col"><div class="qr">{{QR_SVG}}</div><span>Scan to register</span></div>
       <div class="reg-text">
         <h3>Limited seats. Register now!</h3>
         <p>Scan the QR code, fill in the form and pay online (UPI) or in cash at the Physics Department.</p>
         <p class="url">{{URL}}</p>
         <p class="note">Bring the printed acknowledgement and the parental consent form signed by your parent or guardian to the Physics Department.</p>
       </div>
+      <div class="qr-col small"><div class="qr">{{MAP_SVG}}</div><span>&#128205; Venue location</span></div>
     </div>
   </div>
 
@@ -127,5 +132,19 @@
     <span>{{CONTACT}}</span>
   </div>
 </div>
+<script>
+  // make the headline exactly as wide as the header
+  document.fonts.ready.then(() => {
+    const h = document.getElementById("headline"), lines = h.querySelectorAll(".line");
+    const target = h.clientWidth - 1;
+    let size = 60;
+    for (let i = 0; i < 40; i++) {
+      const w = Math.max(...Array.from(lines, l => l.getBoundingClientRect().width));
+      size = size * target / w;
+      lines.forEach(l => l.style.fontSize = size + "pt");
+      if (Math.abs(w - target) < 2) break;
+    }
+  });
+</script>
 </body>
 </html>
