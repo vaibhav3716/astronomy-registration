@@ -21,6 +21,7 @@
   if (c.name || c.phone || c.email)
     $("#contactLine").innerHTML = "Contact: " + [c.name, c.phone && `<a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a>`, c.email && `<a href="mailto:${c.email}">${c.email}</a>`].filter(Boolean).join(" &middot; ");
   if (TEST) $("#testBanner").hidden = false;
+  if (cfg.trip.mapUrl) { const a = $("#mapLink"); a.href = cfg.trip.mapUrl; a.hidden = false; }
 
   // logo for the PDFs (same-origin file)
   fetch("assets/img/bkbc-logo.jpg").then(r => r.blob()).then(b => new Promise(res => {

@@ -230,3 +230,5 @@ legend { font-weight: 700; font-size: 18px; color: var(--indigo); padding: 0 8px
 .choice-grid + .field-error { margin-top: 8px; }
 .modal-card .btn + .btn { margin-top: 8px; }
 .btn.done { background: var(--teal-soft); color: var(--tealdark, #006064); }
+.map-link { display: inline-block; margin-top: 6px; color: var(--gold); font-weight: 600; text-decoration: none; }
+.map-link:hover { text-decoration: underline; }
