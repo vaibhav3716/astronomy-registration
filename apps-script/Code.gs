@@ -12,7 +12,8 @@
 const CONFIG = {
   SHEET_NAME: 'Registrations',
   FOLDER_NAME: 'Astronomy Registration - Payment Screenshots',
-  ID_PREFIX: 'BKBCK-',
+  ID_PREFIX: 'BKBCK-',   // BKBCK-C-01 (Astronomy Course), BKBCK-S-01 (Star Party / Stargazing only)
+  TRIP_OPEN: false,      // set to true when Star Party only registrations open
   FEE_COURSE: 1000,   // course package, stargazing trip included
   FEE_TRIP: 1000,     // stargazing trip only
   TRIP_SEATS: 0,      // 0 = no limit; set a number to close registration automatically
@@ -102,7 +103,7 @@ function doPost(e) {
     if (d.paymentMode === 'online' && utrUsed_(sheet, d.utr))
       return json_({ ok: false, error: 'This UPI transaction ID has already been used for another registration.' });
 
-    const id = nextId_();
+    const id = nextId_(d.programmes.course ? 'C' : 'S');
     let fileCell = '', fileName = '';
 
     if (d.paymentMode === 'online') {
@@ -144,6 +145,7 @@ function formatAll_(d) {
 function validate_(d) {
   const phone = /^[6-9]\d{9}$/;
   if (!d || !d.programmes || (!d.programmes.course && !d.programmes.trip)) return 'Choose the course package or the trip.';
+  if (!d.programmes.course && !CONFIG.TRIP_OPEN) return 'Star Party only registrations will open soon.';
   if (!d.fullName || String(d.fullName).trim().length < 3) return 'Full name is missing.';
   const age = parseInt(d.age, 10);
   if (!age || age < CONFIG.MIN_AGE) return 'The minimum age is ' + CONFIG.MIN_AGE + ' years.';
@@ -182,11 +184,13 @@ function getFolder_() {
 // Registration numbers come from a counter stored with the script (not from the row count),
 // so a number is never given twice, even if rows are deleted or sorted. doPost holds a lock,
 // so two people submitting at the same moment cannot get the same number.
-function nextId_() {
+// Course and Star Party have their own counters: LAST_ID_C and LAST_ID_S.
+function nextId_(kind) {
   const props = PropertiesService.getScriptProperties();
-  const n = Number(props.getProperty('LAST_ID') || 0) + 1;
-  props.setProperty('LAST_ID', String(n));
-  return CONFIG.ID_PREFIX + (n < 10 ? '0' + n : String(n));   // BKBCK-01 ... BKBCK-99, then BKBCK-100
+  const key = 'LAST_ID_' + kind;
+  const n = Number(props.getProperty(key) || 0) + 1;
+  props.setProperty(key, String(n));
+  return CONFIG.ID_PREFIX + kind + '-' + (n < 10 ? '0' + n : String(n));   // BKBCK-C-01 ... BKBCK-C-99, then BKBCK-C-100
 }
 
 function countTrip_(sheet) {

@@ -38,12 +38,12 @@
   <div class="wrap hero-content">
     <p class="eyebrow">Department of Physics &middot; B. K. Birla College, Kalyan</p>
     <h1>Look up. Learn the sky.</h1>
-    <p class="lead">An <strong>Astronomy Course</strong> open to all students and teachers, and the <strong>Star Party Near Tansa</strong>: one night of stars, telescopes, games and guitars. The course package includes the Star Party.</p>
+    <p class="lead">An <strong>Astronomy Course</strong> open to all students and teachers, and the <strong>Star Party Near Tansa</strong>: one night of stars, telescopes, games and guitars. The course package includes the Star Party. <b>Course registrations are now open.</b></p>
     <div class="hero-cards">
-      <a href="#course" class="hero-pill combo"><span class="pill-icon">&#9733;</span><span><b>Astronomy Course package</b><small>&#8377;<span data-fee="course"></span> &middot; Star Party included</small></span></a>
-      <a href="#trip" class="hero-pill"><span class="pill-icon">&#10022;</span><span><b>Star Party only</b><small>&#8377;<span data-fee="trip"></span></small></span></a>
+      <a href="#course" class="hero-pill combo"><span class="pill-icon">&#9733;</span><span><b>Astronomy Course (incl. Star Party)</b><small>&#8377;<span data-fee="course"></span> &middot; Registrations open</small></span></a>
+      <a href="#trip" class="hero-pill"><span class="pill-icon">&#10022;</span><span><b>Star Party only</b><small>Registrations will open soon</small></span></a>
     </div>
-    <a href="#register" class="btn btn-gold">Register now</a>
+    <a href="#register" class="btn btn-gold">Register for the course</a>
   </div>
   <p class="credit hero-credit">Photo: International Gemini Observatory / NOIRLab / NSF / AURA / T. Matsopoulos (CC BY 4.0)</p>
 </section>
@@ -137,10 +137,11 @@
     <p class="kicker">Programme 2</p>
     <h2 data-text="trip.title">Star Party Near Tansa</h2>
     <p class="section-lead">One night under a dark sky, away from city lights, with telescopes, binoculars and a guided tour of the stars.</p>
+    <div class="soon-banner"><b>Star Party only: registrations will open soon.</b> The date will be announced. Those who register for the Astronomy Course already have the Star Party included.</div>
 
     <div class="facts facts-dark">
       <div><span>Date</span><b data-text="trip.date"></b></div>
-      <div><span>Place</span><b><span data-text="trip.place"></span><br><a id="mapLink" class="map-link" href="#" target="_blank" rel="noopener" hidden>&#128205; Open in Google Maps</a></b></div>
+      <div><span>Place (tentative)</span><b><span data-text="trip.place"></span><br><a id="mapLink" class="map-link" href="#" target="_blank" rel="noopener" hidden>&#128205; Open in Google Maps</a></b></div>
       <div><span>Open to</span><b>All students and teachers</b></div>
       <div><span>Travel</span><b>Bus from college</b></div>
       <div><span>Seats</span><b>Limited seats</b></div>
@@ -178,15 +179,15 @@
     <p class="kicker">Fees</p>
     <h2>Choose your option</h2>
     <div class="price-grid">
-      <div class="price featured"><span class="tag">Recommended</span><h4>Astronomy Course package</h4><p class="amount">&#8377;<span data-fee="course"></span></p>
+      <div class="price featured"><span class="tag">Registrations open</span><h4>Astronomy Course (incl. Star Party)</h4><p class="amount">&#8377;<span data-fee="course"></span></p>
         <ul class="price-list"><li>Full course: lectures, notes, assignments and observing nights</li><li><b>Star Party included</b></li><li>Certificate after attending the lectures and appearing for the exam</li></ul></div>
-      <div class="price"><h4>Star Party only</h4><p class="amount">&#8377;<span data-fee="trip"></span></p>
+      <div class="price"><span class="tag tag-soon">Opening soon</span><h4>Star Party only</h4><p class="amount">&#8377;<span data-fee="trip"></span></p>
         <ul class="price-list"><li>One guided night under a dark sky</li><li>Telescopes, binoculars and a sky tour</li><li>Astronomy quiz, night games and music</li></ul></div>
     </div>
     <div class="pay-ways">
       <div><b>Pay online (UPI)</b><span>Scan the QR code in the form, then upload your payment screenshot (PNG, JPG or PDF).</span></div>
       <div><b>Pay cash</b><span>Pay at the <span data-text="cash.place"></span> (<span data-text="cash.timing"></span>).</span></div>
-      <div><b>Complete your registration</b><span>After registering, download the acknowledgement and the parental consent form. Bring the printed acknowledgement and the consent form signed by your parent or guardian to the Physics Department within <span data-text="submitWithinDays"></span> days to collect your receipt.</span></div>
+      <div><b>Complete your registration</b><span>After registering, download the acknowledgement. Bring it, printed, to the Physics Department within <span data-text="submitWithinDays"></span> days to collect your receipt. Students going for the Star Party will also get a parental consent form to be signed by a parent or guardian.</span></div>
     </div>
   </div>
 </section>
@@ -195,13 +196,13 @@
 <section class="section section-form" id="register">
   <div class="wrap narrow">
     <p class="kicker">Registration</p>
-    <h2>Register</h2>
+    <h2>Register for the Astronomy Course</h2>
     <div id="testBanner" class="banner banner-warn" hidden>
       <b>Test mode:</b> registrations are not being saved yet. Acknowledgements will be marked "TEST".
     </div>
     <div id="previousBanner" class="banner banner-info" hidden>
       You have already registered from this device (<b id="prevId"></b>).
-      Download again: <button type="button" class="link-btn" id="prevDownload">acknowledgement</button> &middot; <button type="button" class="link-btn" id="prevConsent">parental consent form</button>
+      Download again: <button type="button" class="link-btn" id="prevDownload">acknowledgement</button><span id="prevConsentWrap"> &middot; <button type="button" class="link-btn" id="prevConsent">parental consent form</button></span>
     </div>
 
     <div id="demoBar" class="banner banner-demo" hidden>
@@ -214,11 +215,11 @@
         <div class="choice-grid">
           <label class="choice">
             <input type="radio" name="programme" value="course" id="optCourse">
-            <span class="choice-card"><b>Astronomy Course package</b><small>&#8377;<span data-fee="course"></span> &middot; Star Party included</small></span>
+            <span class="choice-card"><b>Astronomy Course (incl. Star Party)</b><small>&#8377;<span data-fee="course"></span> &middot; Registrations open</small></span>
           </label>
-          <label class="choice">
+          <label class="choice" id="tripChoice">
             <input type="radio" name="programme" value="trip" id="optTrip">
-            <span class="choice-card"><b>Star Party only</b><small>&#8377;<span data-fee="trip"></span> &middot; limited seats</small></span>
+            <span class="choice-card"><b>Star Party only</b><small id="tripChoiceNote">&#8377;<span data-fee="trip"></span> &middot; limited seats</small></span>
           </label>
         </div>
         <p class="total-line">Total fee: <b>&#8377;<span id="totalAmount">0</span></b> <span id="comboNote" hidden>(Star Party included)</span></p>
@@ -232,7 +233,7 @@
         <div class="choice-grid">
           <label class="choice">
             <input type="radio" name="role" value="student">
-            <span class="choice-card"><b>Student</b><small>Parent / Guardian consent needed for the Star Party</small></span>
+            <span class="choice-card"><b>Student</b><small>Parent / Guardian details as emergency contact</small></span>
           </label>
           <label class="choice">
             <input type="radio" name="role" value="teacher">
@@ -299,7 +300,7 @@
           <div class="grid" style="margin-top:14px">
             <label class="field span-2">Medical Conditions / Allergies<input type="text" name="medical" maxlength="120" placeholder="Leave blank if none"></label>
           </div>
-          <p class="tiny"><span>Travel: bus from college.</span> <span class="only-student">You will need to bring the parental consent form, signed by your parent or guardian.</span></p>
+          <p class="tiny"><span>Travel: bus from college.</span> <span class="only-consent">You will need to bring the parental consent form, signed by your parent or guardian.</span></p>
         </div>
       </fieldset>
 
@@ -358,7 +359,7 @@
         <label class="check"><input type="checkbox" name="agreeConduct"> I will follow the rules laid down by the teachers and organisers, stay with the group, and will not do anything that could harm myself or anyone else or cause any mishap. <em>*</em></label>
         <label class="check"><input type="checkbox" name="agreeLiability"> I understand that the college and the organisers are not responsible for the loss of jewellery, cash, phones or any other belongings, or for any mishap caused by not following instructions. <em>*</em></label>
         <label class="check"><input type="checkbox" name="agreeRules"> I understand that the fee is not refundable once paid, and that the course certificate needs attendance at the lectures and appearing for the exam. <em>*</em></label>
-        <label class="check"><input type="checkbox" name="agreeAck"> <span class="only-student">I will bring the printed acknowledgement and the parental consent form signed by my parent or guardian to the Physics Department within <span data-text="submitWithinDays"></span> days. Until both are submitted, I am not registered for the Star Party.</span><span class="only-teacher" hidden>I will bring the printed acknowledgement to the Physics Department within <span data-text="submitWithinDays"></span> days to collect my receipt.</span> <em>*</em></label>
+        <label class="check"><input type="checkbox" name="agreeAck"> <span class="only-consent">I will bring the printed acknowledgement and the parental consent form signed by my parent or guardian to the Physics Department within <span data-text="submitWithinDays"></span> days. Until both are submitted, I am not registered for the Star Party.</span><span class="no-consent" hidden>I will bring the printed acknowledgement to the Physics Department within <span data-text="submitWithinDays"></span> days to collect my receipt.</span> <em>*</em></label>
       </fieldset>
 
       <div id="formErrors" class="banner banner-error" hidden></div>
@@ -386,8 +387,8 @@
     <div class="modal-icon">&#10003;</div>
     <h3 id="ackTitle">Registration received</h3>
     <p>Your registration ID is <b id="ackId"></b>.</p>
-    <p class="must only-student"><b>Download both documents now.</b> Bring the <b>printed acknowledgement</b> and the <b>consent form signed by your parent or guardian</b> to the Physics Department within <span data-text="submitWithinDays"></span> days. Until then you are not registered for the Star Party.</p>
-    <p class="must only-teacher" hidden><b>Download your acknowledgement now.</b> Bring it, printed, to the Physics Department within <span data-text="submitWithinDays"></span> days to collect your receipt.</p>
+    <p class="must only-consent"><b>Download both documents now.</b> Bring the <b>printed acknowledgement</b> and the <b>consent form signed by your parent or guardian</b> to the Physics Department within <span data-text="submitWithinDays"></span> days. Until then you are not registered for the Star Party.</p>
+    <p class="must no-consent" hidden><b>Download your acknowledgement now.</b> Bring it, printed, to the Physics Department within <span data-text="submitWithinDays"></span> days to collect your receipt.</p>
     <button type="button" class="btn btn-gold btn-block" id="ackDownload">1. Download acknowledgement (PDF)</button>
     <button type="button" class="btn btn-gold btn-block" id="consentDownload">2. Download parental consent form (PDF)</button>
     <button type="button" class="btn btn-ghost btn-block" id="ackClose" disabled>Close</button>

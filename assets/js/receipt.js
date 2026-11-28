@@ -9,10 +9,10 @@
   function programmesText(p) {
     const cfg = window.SITE_CONFIG;
     return p.course
-      ? "Astronomy Course package, Star Party Near Tansa included (" + rs(cfg.fees.course) + ")"
+      ? "Astronomy Course (incl. Star Party Near Tansa)  (" + rs(cfg.fees.course) + ")"
       : "Star Party Near Tansa only (" + rs(cfg.fees.trip) + ")";
   }
-  function programmesShort(p) { return p.course ? "Astronomy Course package (Star Party included)" : "Star Party only"; }
+  function programmesShort(p) { return p.course ? "Astronomy Course (incl. Star Party)" : "Star Party (Stargazing) only"; }
 
   // draw a QR code as vector squares (crisp when printed)
   function drawQR(doc, text, x, y, size) {
@@ -51,7 +51,7 @@
     y += 3;
     // what they registered for, in bold, right under the heading
     const what = d.programmes.course
-      ? "ASTRONOMY COURSE  (Star Party Near Tansa included)"
+      ? "ASTRONOMY COURSE  (incl. Star Party)"
       : "STAR PARTY NEAR TANSA (STARGAZING TRIP) ONLY";
     doc.setFillColor(...(d.programmes.course ? INDIGO : GOLD));
     doc.roundedRect(M + 22, y, CW - 44, 8, 2, 2, "F");
@@ -91,7 +91,9 @@
     ];
     if (d.programmes.course) rows.push(["Certificate", "Given after attending the lectures and appearing for the exam"]);
     if (d.role !== "Teacher") rows.push(["Parent / Guardian", d.guardianName + ", " + d.guardianPhone + " (emergency contact)"]);
-    rows.push(["Star Party", "Travel: bus from college" + (d.medical ? "   |  Medical: " + d.medical : "")]);
+    rows.push(["Star Party", (d.programmes.course ? "Included. Date: " + cfg.trip.date + "; details and the consent form will be shared later. "
+      : "Date: " + cfg.trip.date + ". ") + "Travel: bus from college"]);
+    if (d.medical) rows.push(["Medical notes", d.medical]);
     if (d.paymentMode === "online") {
       rows.push(["UPI transaction ID", d.utr + (d.payerName ? "   (paid from: " + d.payerName + ")" : "")]);
       rows.push(["Screenshot uploaded", d.screenshotName || "-"]);
@@ -149,10 +151,11 @@
          "The office will check your UPI payment, sign the box above, keep this page and the consent form, and return the student's copy below with your receipt."]
       : ["Bring the PRINTOUT of this acknowledgement, the PARENTAL CONSENT FORM signed by your parent or guardian, and " + rs(d.amount) + " in cash to the " + cfg.cash.place + " (" + cfg.cash.timing + ") within " + cfg.submitWithinDays + " days.",
          "The clerk will sign the box above, keep this page and the consent form, and return the student's copy below with your fee receipt."];
-    if (d.role === "Teacher") {
+    if (d.role === "Teacher" || d.programmes.course) {
       steps[0] = steps[0].replace(" and the PARENTAL CONSENT FORM signed by your parent or guardian", "").replace(", the PARENTAL CONSENT FORM signed by your parent or guardian,", "");
       steps[1] = steps[1].replace(" and the consent form", "");
-      steps.push("Your registration is complete once the office signs the box above.");
+      steps.push("Your registration is complete once the office signs the box above." +
+        (d.programmes.course && d.role !== "Teacher" ? " The parental consent form for the Star Party will be given when its date is announced." : ""));
     } else {
       steps.push("Until both the acknowledgement and the signed consent form are submitted, you are NOT registered for the Star Party.");
     }

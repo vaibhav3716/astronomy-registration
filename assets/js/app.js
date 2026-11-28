@@ -21,6 +21,14 @@
   if (c.name || c.phone || c.email)
     $("#contactLine").innerHTML = "Contact: " + [c.name, c.phone && `<a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a>`, c.email && `<a href="mailto:${c.email}">${c.email}</a>`].filter(Boolean).join(" &middot; ");
   if (TEST) $("#testBanner").hidden = false;
+  // Star Party only: closed until registrations open (set registrationOpen.trip in config.js)
+  const TRIP_OPEN = !(cfg.registrationOpen && cfg.registrationOpen.trip === false);
+  if (!TRIP_OPEN) {
+    $("#optTrip").disabled = true;
+    $("#tripChoice").classList.add("closed");
+    $("#tripChoiceNote").textContent = "Registrations will open soon";
+    $("#optCourse").checked = true;
+  }
   if (cfg.trip.mapUrl) { const a = $("#mapLink"); a.href = cfg.trip.mapUrl; a.hidden = false; }
 
   // logo for the PDFs (same-origin file)
@@ -65,17 +73,19 @@
     $("#classYearField").hidden = isTeacher();
     $("#studentIdField").hidden = isTeacher();
     $("#guardianFields").hidden = isTeacher();
-    showRole(form, isTeacher());
+    showConsent(form, !isTeacher() && !isCourse());
     const mode = form.paymentMode.value;
     $("#onlineBlock").hidden = mode !== "online";
     $("#cashBlock").hidden = mode !== "cash";
     if (mode === "online") drawPayQR(t);
   }
-  // show the student or the teacher wording inside an element
-  function showRole(root, teacher) {
-    $$(".only-student", root).forEach(e => e.hidden = teacher);
-    $$(".only-teacher", root).forEach(e => e.hidden = !teacher);
+  // the parental consent form is only for students registering for the Star Party only;
+  // for course students it is given later, when the Star Party details are announced
+  function showConsent(root, need) {
+    $$(".only-consent", root).forEach(e => e.hidden = !need);
+    $$(".no-consent", root).forEach(e => e.hidden = need);
   }
+  const needsConsent = d => d.role !== "Teacher" && !d.programmes.course;
   form.addEventListener("input", update);
   form.addEventListener("change", update);
 
@@ -167,6 +177,7 @@
     const v = n => (form.elements[n].value || "").trim();
     const phoneOK = s => /^[6-9]\d{9}$/.test(s);
 
+    if (form.programme.value === "trip" && !TRIP_OPEN) errs.push("Star Party only registrations will open soon.");
     if (!form.programme.value) { errs.push("Choose the Astronomy Course package or the Star Party only."); $('[data-error="programme"]').textContent = "Choose an option."; }
     if (v("fullName").length < 3) bad("fullName", "Enter your full name.");
     const age = parseInt(v("age"), 10);
@@ -280,7 +291,7 @@
   function makeDocs(data) {
     docs = {
       ack: window.buildAcknowledgement(data, logoDataUrl), ackName: "Acknowledgement_" + data.id + ".pdf",
-      consent: data.role === "Teacher" ? null : window.buildConsentForm(data, logoDataUrl), consentName: "Parental_Consent_Form_" + data.id + ".pdf"
+      consent: needsConsent(data) ? window.buildConsentForm(data, logoDataUrl) : null, consentName: "Parental_Consent_Form_" + data.id + ".pdf"
     };
   }
   function refreshModal() {
@@ -294,12 +305,12 @@
   function finish(data) {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(Object.assign({}, data, { screenshotImage: null }))); } catch (_) {}
     makeDocs(data);
-    const teacher = data.role === "Teacher";
-    got = { ack: false, consent: teacher };   // teachers have no consent form
-    $("#consentDownload").hidden = teacher;
-    $("#ackDownload").textContent = teacher ? "Download acknowledgement (PDF)" : "1. Download acknowledgement (PDF)";
-    showRole($("#ackModal"), teacher);
-    form.reset(); update();
+    const consent = needsConsent(data);
+    got = { ack: false, consent: !consent };
+    $("#consentDownload").hidden = !consent;
+    $("#ackDownload").textContent = consent ? "1. Download acknowledgement (PDF)" : "Download acknowledgement (PDF)";
+    showConsent($("#ackModal"), consent);
+    form.reset(); if (!TRIP_OPEN) $("#optCourse").checked = true; update();
     $$("input, select, button", form).forEach(el => el.disabled = true);
     $("#ackId").textContent = data.id;
     refreshModal();
@@ -330,7 +341,7 @@
     $("#previousBanner").hidden = false;
     $("#prevDownload").onclick = () => { makeDocs(prev); docs.ack.save(docs.ackName); };
     $("#prevConsent").onclick = () => { makeDocs(prev); if (docs.consent) docs.consent.save(docs.consentName); };
-    $("#prevConsent").hidden = prev.role === "Teacher";
+    $("#prevConsentWrap").hidden = !needsConsent(prev);
   }
   showPrevious();
   update();

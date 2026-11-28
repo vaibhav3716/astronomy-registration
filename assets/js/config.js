@@ -19,7 +19,10 @@ window.SITE_CONFIG = {
 
   // Rs. The course package already includes the stargazing trip; the trip can also be taken on its own.
   fees: { course: 1000, trip: 1000 },
-  minAge: 16,                              // minimum age; under 18 needs guardian consent
+  minAge: 16,
+
+  // which registrations are open right now (the Star Party opens later)
+  registrationOpen: { course: true, trip: false },                              // minimum age; under 18 needs guardian consent
 
   course: {
     title: "Astronomy Course: Sky, Time and Telescopes",
@@ -30,8 +33,8 @@ window.SITE_CONFIG = {
 
   trip: {
     title: "Star Party Near Tansa",
-    date: "19th December, 2026",
-    place: "Atma Malik Institute of Technology & Research, Mohili-Aghai, Shahapur (Thane district)",
+    date: "To be announced",
+    place: "Atma Malik Institute of Technology & Research, Mohili-Aghai, Shahapur (Thane district) (Tentative)",
     mapUrl: "https://share.google/LEMSChtrACBpUne1e",
     reporting: "Reporting time at the college will be shared on WhatsApp"
   },
