@@ -44,15 +44,15 @@
   const total = () => isCourse() ? fees.course : (form.programme.value === "trip" ? fees.trip : 0);
 
   function upiUri(amount) {
-    const p = new URLSearchParams({ pa: cfg.upi.id, pn: cfg.upi.payeeName, am: amount.toFixed(2), cu: "INR", tn: "Astronomy registration" });
-    return "upi://pay?" + p.toString().replace(/\+/g, "%20");
+    const p = new URLSearchParams({ pa: cfg.upi.id, pn: cfg.upi.payeeName, am: amount.toFixed(2), cu: "INR" });
+    return "upi://pay?" + p.toString().replace(/\+/g, "%20").replace(/%40/g, "@");
   }
   function drawPayQR(amount) {
     const holder = $("#qrHolder");
     if (cfg.upi.id) {
       const q = qrcode(0, "M"); q.addData(upiUri(amount)); q.make();
       holder.innerHTML = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
-      $("#upiLine").textContent = "UPI ID: " + cfg.upi.id;
+      $("#upiLine").innerHTML = "Pay to: <b>" + cfg.upi.payeeName + "</b><br>UPI ID: " + cfg.upi.id;
       const btn = $("#upiButton"); btn.href = upiUri(amount);
       btn.hidden = !/Android|iPhone|iPad/i.test(navigator.userAgent);
     } else if (cfg.upi.qrImage) {

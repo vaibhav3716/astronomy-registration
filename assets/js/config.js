@@ -12,8 +12,8 @@ window.SITE_CONFIG = {
   //             with the exact amount already filled in.
   //  - qrImage: OR the path to your own QR image, e.g. "assets/img/upi-qr.png".
   upi: {
-    id: "",
-    payeeName: "Department of Physics, B K Birla College",
+    id: "vaibhavyenare3716-1@oksbi",
+    payeeName: "Vaibhav Yenare",
     qrImage: ""
   },
 
