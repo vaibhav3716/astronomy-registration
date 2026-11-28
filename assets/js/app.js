@@ -352,6 +352,8 @@
   function showPrevious() {
     let prev = null;
     try { prev = JSON.parse(localStorage.getItem(STORE_KEY) || "null"); } catch (_) {}
+    // forget mock-run registrations made while the site was in test mode
+    if (prev && !TEST && (prev.test || /^TEST/.test(prev.id || ""))) { try { localStorage.removeItem(STORE_KEY); } catch (_) {} prev = null; }
     if (!prev) return;
     $("#prevId").textContent = prev.id;
     $("#previousBanner").hidden = false;
