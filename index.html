@@ -300,7 +300,7 @@
           <div class="grid" style="margin-top:14px">
             <label class="field span-2">Medical Conditions / Allergies<input type="text" name="medical" maxlength="120" placeholder="Leave blank if none"></label>
           </div>
-          <p class="tiny"><span>Travel: bus from college.</span> <span class="only-consent">You will need to bring the parental consent form, signed by your parent or guardian.</span></p>
+          <p class="tiny"><span>Travel: bus from college.</span> <span class="only-consent">The parental consent form comes with your acknowledgement. Get it signed by your parent or guardian.</span></p>
         </div>
       </fieldset>
 
@@ -387,10 +387,10 @@
     <div class="modal-icon">&#10003;</div>
     <h3 id="ackTitle">Registration received</h3>
     <p>Your registration ID is <b id="ackId"></b>.</p>
-    <p class="must only-consent"><b>Download both documents now.</b> Bring the <b>printed acknowledgement</b> and the <b>consent form signed by your parent or guardian</b> to the Physics Department within <span data-text="submitWithinDays"></span> days. Until then you are not registered for the Star Party.</p>
+    <p class="must only-consent"><b>Download your acknowledgement now.</b> The <b>parental consent form</b> is on its last page. Print it, get the consent form <b>signed by your parent or guardian</b>, and bring both to the Physics Department within <span data-text="submitWithinDays"></span> days. Until then your registration is not complete.</p>
     <p class="must no-consent" hidden><b>Download your acknowledgement now.</b> Bring it, printed, to the Physics Department within <span data-text="submitWithinDays"></span> days to collect your receipt.</p>
-    <button type="button" class="btn btn-gold btn-block" id="ackDownload">1. Download acknowledgement (PDF)</button>
-    <button type="button" class="btn btn-gold btn-block" id="consentDownload">2. Download parental consent form (PDF)</button>
+    <button type="button" class="btn btn-gold btn-block" id="ackDownload">Download acknowledgement (PDF)</button>
+    <button type="button" class="btn btn-gold btn-block" id="consentDownload" hidden>Download parental consent form (PDF)</button>
     <button type="button" class="btn btn-ghost btn-block" id="ackClose" disabled>Close</button>
     <div id="waBlock" class="wa-block" hidden>
       <p class="wa-title">Join the course WhatsApp group</p>
@@ -400,7 +400,7 @@
       <p class="tiny">Scan the QR code with your phone camera, or tap the button.</p>
     </div>
     <p id="waCash" class="wa-cash" hidden>After you pay the fee at the Physics Department, the office will give you the QR code to join the course WhatsApp group.</p>
-    <p class="tiny" id="ackCloseHint">You can close this window after downloading both.</p>
+    <p class="tiny" id="ackCloseHint">You can close this window after downloading.</p>
   </div>
 </div>
 

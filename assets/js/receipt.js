@@ -2,7 +2,8 @@
    Top part: submitted at the Physics Department (signed by the clerk / verifier).
    Bottom strip: student's copy, signed and handed back as proof. */
 (function () {
-  const INDIGO = [31, 42, 107], TEAL = [0, 131, 143], SLATE = [79, 91, 112], LINE = [200, 206, 222], GOLD = [217, 154, 30];
+  // black and white only (prints the same on any printer)
+  const INDIGO = [0, 0, 0], TEAL = [0, 0, 0], SLATE = [60, 60, 60], LINE = [140, 140, 140], GOLD = [0, 0, 0], BAR = [225, 225, 225];
 
   function rs(n) { return "Rs. " + Number(n).toLocaleString("en-IN") + "/-"; }
 
@@ -19,7 +20,7 @@
     const q = qrcode(0, "M"); q.addData(text); q.make();
     const n = q.getModuleCount(), quiet = 2, cell = size / (n + 2 * quiet);
     doc.setFillColor(255, 255, 255); doc.rect(x, y, size, size, "F");
-    doc.setFillColor(20, 24, 40);
+    doc.setFillColor(0, 0, 0);
     for (let r = 0; r < n; r++) for (let c = 0; c < n; c++)
       if (q.isDark(r, c)) doc.rect(x + (c + quiet) * cell, y + (r + quiet) * cell, cell + 0.02, cell + 0.02, "F");
   }
@@ -53,16 +54,16 @@
     const what = d.programmes.course
       ? "ASTRONOMY COURSE  (incl. Star Party)"
       : "STAR PARTY (STARGAZING) ONLY";
-    doc.setFillColor(...(d.programmes.course ? INDIGO : GOLD));
-    doc.roundedRect(M + 22, y, CW - 44, 8, 2, 2, "F");
-    doc.setFont("helvetica", "bold"); doc.setFontSize(11.5); doc.setTextColor(255, 255, 255);
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.6);
+    doc.roundedRect(M + 22, y, CW - 44, 8, 2, 2, "S");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(11.5); doc.setTextColor(0, 0, 0);
     doc.text(what, W / 2, y + 5.6, { align: "center" });
     y += 11;
 
     // registration id block with QR code
     const qrText = ["BKBCK", d.id, d.fullName, d.amount, d.paymentMode, d.utr || "-"].join("|");
     const boxY = y;
-    doc.setFillColor(238, 241, 247); doc.setDrawColor(...LINE); doc.setLineWidth(0.3);
+    doc.setFillColor(245, 245, 245); doc.setDrawColor(...LINE); doc.setLineWidth(0.3);
     doc.roundedRect(M, boxY, CW, 26, 2, 2, "FD");
     drawQR(doc, qrText, W - M - 24.5, boxY + 1, 24);
     doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(...SLATE);
@@ -91,7 +92,7 @@
     ];
     if (d.programmes.course) rows.push(["Certificate", "Given after attending the lectures and appearing for the exam"]);
     if (d.role !== "Teacher") rows.push(["Parent / Guardian", d.guardianName + ", " + d.guardianPhone + " (emergency contact)"]);
-    rows.push(["Star Party", (d.programmes.course ? "Included. Date: " + cfg.trip.date + "; details and the consent form will be shared later. "
+    rows.push(["Star Party", (d.programmes.course ? "Included. Date and venue will be announced; fill them in on the consent form. "
       : "Date: " + cfg.trip.date + ". ") + "Travel: bus from college"]);
     if (d.medical) rows.push(["Medical notes", d.medical]);
     if (d.paymentMode === "online") {
@@ -106,7 +107,7 @@
     rows.forEach((r, i) => {
       const val = doc.splitTextToSize(String(r[1] || "-"), CW - labelW - 4);
       const h = Math.max(5.5, 4.4 * val.length + 1.4);
-      if (i % 2 === 0) { doc.setFillColor(246, 247, 251); doc.rect(M, y, CW, h, "F"); }
+      if (i % 2 === 0) { doc.setFillColor(244, 244, 244); doc.rect(M, y, CW, h, "F"); }
       doc.setFont("helvetica", "bold"); doc.setTextColor(...SLATE);
       doc.text(r[0], M + 3, y + 4.3);
       doc.setFont("helvetica", "normal"); doc.setTextColor(25, 30, 50);
@@ -120,8 +121,8 @@
     const boxH = 34;
     doc.setDrawColor(...INDIGO); doc.setLineWidth(0.5);
     doc.rect(M, y, CW, boxH);
-    doc.setFillColor(...INDIGO); doc.rect(M, y, CW, 6.5, "F");
-    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
+    doc.setFillColor(...BAR); doc.rect(M, y, CW, 6.5, "FD");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
     doc.text("FOR OFFICE USE ONLY", M + 3, y + 4.5);
     doc.text(d.paymentMode === "online" ? "Online payment verification" : "Cash payment", W - M - 3, y + 4.5, { align: "right" });
     doc.setTextColor(25, 30, 50); doc.setFont("helvetica", "normal"); doc.setFontSize(10);
@@ -151,13 +152,13 @@
          "The office will check your UPI payment, sign the box above, keep this page and the consent form, and return the student's copy below with your receipt."]
       : ["Bring the PRINTOUT of this acknowledgement, the PARENTAL CONSENT FORM signed by your parent or guardian, and " + rs(d.amount) + " in cash to the " + cfg.cash.place + " (" + cfg.cash.timing + ") within " + cfg.submitWithinDays + " days.",
          "The clerk will sign the box above, keep this page and the consent form, and return the student's copy below with your fee receipt."];
-    if (d.role === "Teacher" || d.programmes.course) {
+    if (d.role === "Teacher") {
       steps[0] = steps[0].replace(" and the PARENTAL CONSENT FORM signed by your parent or guardian", "").replace(", the PARENTAL CONSENT FORM signed by your parent or guardian,", "");
       steps[1] = steps[1].replace(" and the consent form", "");
-      steps.push("Your registration is complete once the office signs the box above." +
-        (d.programmes.course && d.role !== "Teacher" ? " The parental consent form for the Star Party will be given when its date is announced." : ""));
+      steps.push("Your registration is complete once the office signs the box above.");
     } else {
-      steps.push("Until both the acknowledgement and the signed consent form are submitted, you are NOT registered for the Star Party.");
+      steps[0] = steps[0].replace("PARENTAL CONSENT FORM signed", "PARENTAL CONSENT FORM (the last page of this PDF) signed");
+      steps.push("Until both the acknowledgement and the signed consent form are submitted, your registration is NOT complete.");
     }
     // course registrants: WhatsApp group QR beside the steps
     const wa = cfg.whatsappGroup, showWa = !!(wa && wa.url && d.programmes.course && d.paymentMode === "online");
@@ -170,7 +171,7 @@
     if (showWa) {
       const qs = 24, qx = W - M - qs, qy = stepsTop - 6;
       drawQR(doc, wa.url, qx, qy, qs);
-      doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(18, 140, 74);
+      doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(0, 0, 0);
       doc.text("WhatsApp group", qx + qs / 2, qy + qs + 3, { align: "center" });
       y = Math.max(y, qy + qs + 5);
     }
@@ -184,8 +185,8 @@
     y += 5;
 
     // student's copy
-    doc.setFillColor(...TEAL); doc.rect(M, y, CW, 6.5, "F");
-    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
+    doc.setFillColor(...BAR); doc.setDrawColor(0, 0, 0); doc.rect(M, y, CW, 6.5, "FD");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
     doc.text("STUDENT'S COPY  |  Department of Physics, B. K. Birla College, Kalyan", M + 3, y + 4.5);
     y += 11;
     doc.setTextColor(25, 30, 50); doc.setFontSize(9.5);
@@ -211,7 +212,7 @@
     // TEST stamp (drawn last, semi-transparent, so it sits over everything)
     if (d.test) {
       if (doc.GState) doc.setGState(new doc.GState({ opacity: 0.18 }));
-      doc.setTextColor(200, 30, 30); doc.setFont("helvetica", "bold"); doc.setFontSize(54);
+      doc.setTextColor(120, 120, 120); doc.setFont("helvetica", "bold"); doc.setFontSize(54);
       doc.text("TEST ONLY", W / 2, 140, { align: "center", angle: 30 });
       doc.setFontSize(30);
       doc.text("NOT A REGISTRATION", W / 2 + 6, 158, { align: "center", angle: 30 });
@@ -220,7 +221,7 @@
 
     // footer
     const footer = () => {
-      doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(150, 155, 170);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(110, 110, 110);
       doc.text("Generated online on " + d.submittedAt + ". The registration ID and QR code are unique to this registration.", W / 2, 293.5, { align: "center" });
     };
     footer();
@@ -228,8 +229,8 @@
     // page 2: the uploaded payment screenshot, so the office can check it against the UTR
     if (d.paymentMode === "online" && d.screenshotImage) {
       doc.addPage();
-      doc.setFillColor(...INDIGO); doc.rect(M, 14, CW, 8, "F");
-      doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 255, 255);
+      doc.setFillColor(...BAR); doc.setDrawColor(0, 0, 0); doc.rect(M, 14, CW, 8, "FD");
+      doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(0, 0, 0);
       doc.text("ATTACHMENT: UPI PAYMENT SCREENSHOT", M + 3, 19.5);
       doc.text(d.id, W - M - 3, 19.5, { align: "right" });
       doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(25, 30, 50);
@@ -241,7 +242,7 @@
       doc.addImage(im.data, "JPEG", (W - iw) / 2, 35, iw, ih);
       if (d.test) {
         if (doc.GState) doc.setGState(new doc.GState({ opacity: 0.18 }));
-        doc.setTextColor(200, 30, 30); doc.setFont("helvetica", "bold"); doc.setFontSize(54);
+        doc.setTextColor(120, 120, 120); doc.setFont("helvetica", "bold"); doc.setFontSize(54);
         doc.text("TEST ONLY", W / 2, 160, { align: "center", angle: 30 });
         if (doc.GState) doc.setGState(new doc.GState({ opacity: 1 }));
       }

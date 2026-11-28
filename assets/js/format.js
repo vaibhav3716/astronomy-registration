@@ -34,7 +34,9 @@
 
   // class / year: known short forms (FY, BSc, BCom ...) fixed, other words capitalised
   function classYear(s) {
-    return squash(s).split(" ").map(w => SHORT[w.toLowerCase()] || (w.length <= 3 && /^[a-z]+$/i.test(w) ? w.toUpperCase() : capWord(w))).join(" ");
+    // split joined forms such as "fybsc" or "sy.bcom" into "FY BSc", "SY BCom"
+    s = squash(s).replace(/\b(fy|sy|ty|fe|se|te|be)[.\-]?(ba|ma|bsc|msc|bcom|mcom|bms|baf|bbi|bfm|bba|bca|bmm|it|cs)\b/gi, "$1 $2");
+    return s.split(" ").map(w => SHORT[w.toLowerCase()] || (w.length <= 3 && /^[a-z]+$/i.test(w) ? w.toUpperCase() : capWord(w))).join(" ");
   }
 
   // free text: first letter capital, the rest left as written

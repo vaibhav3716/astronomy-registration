@@ -11,7 +11,9 @@
  */
 const CONFIG = {
   SHEET_NAME: 'Registrations',
-  FOLDER_NAME: 'Astronomy Registration - Payment Screenshots',
+  ROOT_FOLDER: 'Astronomy Course Registrations 2026-27',          // everything lives in this Drive folder
+  SHEET_FOLDER: 'Registration Sheet',                              // the Google Sheet
+  FILES_FOLDER: 'Acknowledgements and Payment Screenshots',        // BKBCK-C-01_Name_Acknowledgement.pdf + _Payment.jpg
   ID_PREFIX: 'BKBCK-',   // BKBCK-C-01 (Astronomy Course), BKBCK-S-01 (Star Party / Stargazing only)
   TRIP_OPEN: false,      // set to true when Star Party only registrations open
   FEE_COURSE: 1000,   // course package, stargazing trip included
@@ -24,7 +26,7 @@ const CONFIG = {
 const HEADERS = [
   'Registration ID', 'Submitted at', 'Student / Teacher', 'Full name', 'Age', 'Gender', 'Mobile', 'Email',
   'In-house / Outside', 'College', 'Class / Year', 'Department / Stream', 'Student ID', 'City / Area',
-  'Course package', 'Trip', 'Amount (Rs)', 'Payment mode', 'UPI transaction ID', 'Paid from', 'Screenshot',
+  'Course package', 'Trip', 'Amount (Rs)', 'Payment mode', 'UPI transaction ID', 'Paid from', 'Screenshot', 'Acknowledgement PDF',
   'Parent / Guardian', 'Parent / Guardian mobile', 'Medical notes',
   // filled in by the office
   'Payment Verified / Received (Y/N)', 'Receipt no.', 'Signed consent form received (Y/N)', 'Verified by', 'Office notes'
@@ -66,7 +68,9 @@ const FMT = (function () {
 
   // class / year: known short forms (FY, BSc, BCom ...) fixed, other words capitalised
   function classYear(s) {
-    return squash(s).split(" ").map(w => SHORT[w.toLowerCase()] || (w.length <= 3 && /^[a-z]+$/i.test(w) ? w.toUpperCase() : capWord(w))).join(" ");
+    // split joined forms such as "fybsc" or "sy.bcom" into "FY BSc", "SY BCom"
+    s = squash(s).replace(/\b(fy|sy|ty|fe|se|te|be)[.\-]?(ba|ma|bsc|msc|bcom|mcom|bms|baf|bbi|bfm|bba|bca|bmm|it|cs)\b/gi, "$1 $2");
+    return s.split(" ").map(w => SHORT[w.toLowerCase()] || (w.length <= 3 && /^[a-z]+$/i.test(w) ? w.toUpperCase() : capWord(w))).join(" ");
   }
 
   // free text: first letter capital, the rest left as written
@@ -89,6 +93,7 @@ function doPost(e) {
   if (!lock.tryLock(30000)) return json_({ ok: false, error: 'The server is busy.' });
   try {
     const d = JSON.parse(e.postData.contents);
+    if (d.action === 'ack') return saveAck_(d);
     formatAll_(d);
     const err = validate_(d);
     if (err) return json_({ ok: false, error: err });
@@ -109,7 +114,7 @@ function doPost(e) {
     if (d.paymentMode === 'online') {
       const bytes = Utilities.base64Decode(d.file.data);
       const ext = (d.file.name.match(/\.[A-Za-z0-9]+$/) || [''])[0].toLowerCase();
-      fileName = id + '_' + safe_(d.fullName).replace(/\s+/g, '_') + ext;
+      fileName = id + '_' + safe_(d.fullName).replace(/\s+/g, '_') + '_Payment' + ext;
       const file = getFolder_().createFile(Utilities.newBlob(bytes, d.file.type, fileName));
       fileCell = '=HYPERLINK("' + file.getUrl() + '","' + fileName + '")';
     }
@@ -119,7 +124,7 @@ function doPost(e) {
       id, submittedAt, d.role === 'Teacher' ? 'Teacher' : 'Student', safe_(d.fullName), d.age, safe_(d.gender), "'" + d.phone, safe_(d.email),
       safe_(d.collegeType), safe_(d.institution), safe_(d.classYear), safe_(d.department), safe_(d.studentId), safe_(d.city),
       d.programmes.course ? 'Yes' : '', 'Yes', amount,
-      d.paymentMode === 'online' ? 'Online (UPI)' : 'Cash', d.utr ? "'" + d.utr : '', safe_(d.payerName), fileCell,
+      d.paymentMode === 'online' ? 'Online (UPI)' : 'Cash', d.utr ? "'" + d.utr : '', safe_(d.payerName), fileCell, '',
       safe_(d.guardianName), d.guardianPhone ? "'" + d.guardianPhone : '', safe_(d.medical),
       '', '', '', '', ''
     ]);
@@ -176,9 +181,50 @@ function getSheet_() {
   return sh;
 }
 
-function getFolder_() {
-  const it = DriveApp.getFoldersByName(CONFIG.FOLDER_NAME);
-  return it.hasNext() ? it.next() : DriveApp.createFolder(CONFIG.FOLDER_NAME);
+function childFolder_(parent, name) {
+  const it = parent.getFoldersByName(name);
+  return it.hasNext() ? it.next() : parent.createFolder(name);
+}
+function rootFolder_() {
+  const it = DriveApp.getFoldersByName(CONFIG.ROOT_FOLDER);
+  return it.hasNext() ? it.next() : DriveApp.createFolder(CONFIG.ROOT_FOLDER);
+}
+function getFolder_() { return childFolder_(rootFolder_(), CONFIG.FILES_FOLDER); }
+
+// The acknowledgement PDF (sent by the website right after registering) is saved next to the
+// payment screenshot and linked in the sheet. Only the first copy for each ID is kept.
+function saveAck_(d) {
+  const sheet = getSheet_();
+  const rows = sheet.getLastRow() - 1;
+  if (rows <= 0 || !/^BKBCK-[CS]-\d+$/.test(d.id || '') || !d.file || !d.file.data) return json_({ ok: false, error: 'Not found.' });
+  const ids = sheet.getRange(2, 1, rows, 1).getValues().map(r => String(r[0]));
+  const i = ids.indexOf(d.id);
+  if (i < 0) return json_({ ok: false, error: 'Not found.' });
+  const row = i + 2, col = HEADERS.indexOf('Acknowledgement PDF') + 1;
+  if (sheet.getRange(row, col).getValue()) return json_({ ok: true, already: true });
+  if (d.file.data.length * 0.75 > 15 * 1024 * 1024) return json_({ ok: false, error: 'Too large.' });
+  const name = sheet.getRange(row, HEADERS.indexOf('Full name') + 1).getValue();
+  const fileName = d.id + '_' + String(name).replace(/\s+/g, '_') + '_Acknowledgement.pdf';
+  const file = getFolder_().createFile(Utilities.newBlob(Utilities.base64Decode(d.file.data), 'application/pdf', fileName));
+  sheet.getRange(row, col).setFormula('=HYPERLINK("' + file.getUrl() + '","' + fileName + '")');
+  return json_({ ok: true });
+}
+
+/**
+ * Run once from the Apps Script editor (select adminSetup, then Run):
+ * puts the Google Sheet and the files into one Drive folder, fixes the header row,
+ * removes test rows and starts the numbering again from BKBCK-C-01 / BKBCK-S-01.
+ */
+function adminSetup() {
+  const root = rootFolder_();
+  DriveApp.getFileById(SpreadsheetApp.getActiveSpreadsheet().getId()).moveTo(childFolder_(root, CONFIG.SHEET_FOLDER));
+  getFolder_();
+  const sheet = getSheet_();
+  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold').setBackground('#1F2A6B').setFontColor('#ffffff');
+  if (sheet.getLastRow() > 1) sheet.deleteRows(2, sheet.getLastRow() - 1);   // test registrations
+  const props = PropertiesService.getScriptProperties();
+  ['LAST_ID', 'LAST_ID_C', 'LAST_ID_S'].forEach(k => props.deleteProperty(k));
+  Logger.log('Done. Folder: ' + root.getUrl());
 }
 
 // Registration numbers come from a counter stored with the script (not from the row count),

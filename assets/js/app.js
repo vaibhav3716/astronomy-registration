@@ -34,7 +34,21 @@
   // logo for the PDFs (same-origin file)
   fetch("assets/img/bkbc-logo.jpg").then(r => r.blob()).then(b => new Promise(res => {
     const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(b);
-  })).then(u => logoDataUrl = u).catch(() => {});
+  })).then(toGray).then(u => logoDataUrl = u).catch(() => {});
+  function toGray(url) {
+    return new Promise(res => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+        const g = c.getContext("2d"); g.drawImage(img, 0, 0);
+        const px = g.getImageData(0, 0, c.width, c.height), a = px.data;
+        for (let i = 0; i < a.length; i += 4) { const v = 0.299 * a[i] + 0.587 * a[i + 1] + 0.114 * a[i + 2]; a[i] = a[i + 1] = a[i + 2] = v; }
+        g.putImageData(px, 0, 0); res(c.toDataURL("image/jpeg", 0.9));
+      };
+      img.onerror = () => res(url);
+      img.src = url;
+    });
+  }
 
   /* ---------- dynamic parts of the form ---------- */
   // the course package includes the stargazing trip
@@ -73,7 +87,7 @@
     $("#classYearField").hidden = isTeacher();
     $("#studentIdField").hidden = isTeacher();
     $("#guardianFields").hidden = isTeacher();
-    showConsent(form, !isTeacher() && !isCourse());
+    showConsent(form, !isTeacher());
     const mode = form.paymentMode.value;
     $("#onlineBlock").hidden = mode !== "online";
     $("#cashBlock").hidden = mode !== "cash";
@@ -85,7 +99,7 @@
     $$(".only-consent", root).forEach(e => e.hidden = !need);
     $$(".no-consent", root).forEach(e => e.hidden = need);
   }
-  const needsConsent = d => d.role !== "Teacher" && !d.programmes.course;
+  const needsConsent = d => d.role !== "Teacher";
   form.addEventListener("input", update);
   form.addEventListener("change", update);
 
@@ -289,9 +303,11 @@
   window.addEventListener("beforeunload", e => { if (!allGot()) { e.preventDefault(); e.returnValue = ""; return ""; } });
 
   function makeDocs(data) {
+    const ack = window.buildAcknowledgement(data, logoDataUrl);
+    if (needsConsent(data)) window.buildConsentForm(data, logoDataUrl, ack);
     docs = {
-      ack: window.buildAcknowledgement(data, logoDataUrl), ackName: "Acknowledgement_" + data.id + ".pdf",
-      consent: needsConsent(data) ? window.buildConsentForm(data, logoDataUrl) : null, consentName: "Parental_Consent_Form_" + data.id + ".pdf"
+      ack: ack, ackName: "Acknowledgement_" + data.id + ".pdf",
+      consent: null, consentName: ""
     };
   }
   function refreshModal() {
@@ -299,17 +315,17 @@
     $("#consentDownload").classList.toggle("done", got.consent);
     $("#ackClose").disabled = !allGot();
     $("#ackCloseHint").textContent = allGot()
-      ? (docs.consent ? "Both downloaded. Print the acknowledgement and get the consent form signed by your parent or guardian." : "Downloaded. Print it and bring it to the Physics Department.")
-      : (docs.consent ? "You can close this window after downloading both." : "You can close this window after downloading.");
+      ? "Downloaded. Print it and bring it to the Physics Department."
+      : "You can close this window after downloading.";
   }
   function finish(data) {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(Object.assign({}, data, { screenshotImage: null }))); } catch (_) {}
     makeDocs(data);
     const consent = needsConsent(data);
-    got = { ack: false, consent: !consent };
-    $("#consentDownload").hidden = !consent;
-    $("#ackDownload").textContent = consent ? "1. Download acknowledgement (PDF)" : "Download acknowledgement (PDF)";
+    got = { ack: false, consent: true };      // the consent form is inside the acknowledgement PDF
+    $("#ackDownload").textContent = consent ? "Download acknowledgement + consent form (PDF)" : "Download acknowledgement (PDF)";
     showConsent($("#ackModal"), consent);
+    saveAckToDrive(data);
     showWhatsApp(data);
     form.reset(); if (!TRIP_OPEN) $("#optCourse").checked = true; update();
     $$("input, select, button", form).forEach(el => el.disabled = true);
@@ -332,6 +348,15 @@
     if (!allGot()) { history.pushState({ ack: true }, ""); $("#ackModal").hidden = false; }
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !allGot()) e.preventDefault(); });
+
+  /* ---------- keep a copy of the acknowledgement PDF in Google Drive, next to the payment screenshot ---------- */
+  function saveAckToDrive(data) {
+    if (TEST) return;
+    try {
+      const b64 = docs.ack.output("datauristring").split(",")[1];
+      fetch(cfg.appsScriptUrl, { method: "POST", body: JSON.stringify({ action: "ack", id: data.id, file: { data: b64 } }) }).catch(() => {});
+    } catch (_) {}
+  }
 
   /* ---------- course WhatsApp group (course registrants only) ---------- */
   const wa = cfg.whatsappGroup;
@@ -359,7 +384,7 @@
     $("#previousBanner").hidden = false;
     $("#prevDownload").onclick = () => { makeDocs(prev); docs.ack.save(docs.ackName); };
     $("#prevConsent").onclick = () => { makeDocs(prev); if (docs.consent) docs.consent.save(docs.consentName); };
-    $("#prevConsentWrap").hidden = !needsConsent(prev);
+    $("#prevConsentWrap").hidden = true;   // the consent form is inside the acknowledgement PDF
     if (wa && wa.url && prev.programmes && prev.programmes.course && prev.paymentMode === "online") { $("#prevWa").href = wa.url; $("#prevWaWrap").hidden = false; }
   }
   showPrevious();

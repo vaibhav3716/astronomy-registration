@@ -1,12 +1,14 @@
 /* Builds the parent / guardian consent form (A4) for the stargazing trip, pre-filled with
    the student's details. The parent signs it and the student submits it with the acknowledgement. */
 (function () {
-  const INDIGO = [31, 42, 107], TEAL = [0, 131, 143], SLATE = [79, 91, 112], LINE = [200, 206, 222];
+  const INDIGO = [0, 0, 0], TEAL = [0, 0, 0], SLATE = [60, 60, 60], LINE = [140, 140, 140], BAR = [225, 225, 225];
 
-  window.buildConsentForm = function (d, logoDataUrl) {
+  // pass an existing jsPDF document to add the form as its last page (printed with the acknowledgement)
+  window.buildConsentForm = function (d, logoDataUrl, into) {
     const cfg = window.SITE_CONFIG;
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const doc = into || new jsPDF({ unit: "mm", format: "a4" });
+    if (into) doc.addPage();
     const W = 210, M = 15, CW = W - 2 * M;
     let y = 10;
 
@@ -25,7 +27,7 @@
     doc.text("Parent / Guardian Consent Form", W / 2, y, { align: "center" });
     y += 5;
     doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(...SLATE);
-    doc.text("Star Party Near Tansa  |  Registration ID: " + d.id, W / 2, y, { align: "center" });
+    doc.text("Star Party (stargazing trip)  |  Registration ID: " + d.id, W / 2, y, { align: "center" });
     y += 5;
 
     // student and trip details (pre-filled)
@@ -35,16 +37,20 @@
       ["College", d.institution],
       ["Student's mobile", d.phone],
       ["Parent / Guardian", d.guardianName + ", " + d.guardianPhone],
-      ["Trip", cfg.trip.place + "   |   Date: " + cfg.trip.date],
+      ["Venue", ""],
+      ["Date", ""],
       ["Travel", "Bus from college, to the site and back"],
     ];
     doc.setFontSize(9.5);
     rows.forEach((r, i) => {
-      const val = doc.splitTextToSize(String(r[1] || "-"), CW - 44);
-      const h = Math.max(5.4, 4.2 * val.length + 1.3);
-      if (i % 2 === 0) { doc.setFillColor(246, 247, 251); doc.rect(M, y, CW, h, "F"); }
+      const blank = r[0] === "Venue" || r[0] === "Date";   // left empty, to be filled in with a pen
+      const val = blank ? [] : doc.splitTextToSize(String(r[1] || "-"), CW - 44);
+      const h = blank ? 9 : Math.max(5.4, 4.2 * val.length + 1.3);
+      if (i % 2 === 0) { doc.setFillColor(244, 244, 244); doc.rect(M, y, CW, h, "F"); }
       doc.setFont("helvetica", "bold"); doc.setTextColor(...SLATE); doc.text(r[0], M + 3, y + 4);
-      doc.setFont("helvetica", "normal"); doc.setTextColor(25, 30, 50); doc.text(val, M + 42, y + 4);
+      doc.setFont("helvetica", "normal"); doc.setTextColor(25, 30, 50);
+      if (blank) { doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.25); doc.line(M + 42, y + 7, r[0] === "Date" ? M + 100 : W - M - 3, y + 7); }
+      else doc.text(val, M + 42, y + 4);
       y += h;
     });
     y += 5;
@@ -52,7 +58,7 @@
     // consent statement
     doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(25, 30, 50);
     const para = "I, ____________________________________ (Parent / Guardian), give my consent for my ward " + d.fullName +
-      " to take part in the Star Party Near Tansa organised by the Department of Physics, B. K. Birla College of Arts, Science & Commerce, Kalyan, " +
+      " to take part in the Star Party organised by the Department of Physics, B. K. Birla College of Arts, Science & Commerce, Kalyan, " +
       "including the night spent outdoors at the observing site and travel to and from the site by bus from the college. " +
       "My ward and I have read and agree to the following:";
     const pl = doc.splitTextToSize(para, CW);
@@ -77,8 +83,8 @@
 
     // signatures
     doc.setDrawColor(...INDIGO); doc.setLineWidth(0.4); doc.rect(M, y, CW, 48);
-    doc.setFillColor(...INDIGO); doc.rect(M, y, CW, 6.5, "F");
-    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
+    doc.setFillColor(...BAR); doc.rect(M, y, CW, 6.5, "FD");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
     doc.text("SIGNATURES", M + 3, y + 4.5);
     doc.setFont("helvetica", "normal"); doc.setTextColor(25, 30, 50); doc.setFontSize(9.8);
     const sy = y + 14, col2 = M + CW / 2 + 4;
@@ -102,18 +108,18 @@
     doc.text("Received by: ________________   Sign: ____________   Date: ___ / ___ / _____", M + 62, y + 10.2);
     y += 18;
 
-    doc.setFont("helvetica", "bold"); doc.setFontSize(9.2); doc.setTextColor(200, 40, 40);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(9.2); doc.setTextColor(0, 0, 0);
     const note = doc.splitTextToSize("Submit this form, signed by your parent or guardian, together with the printed acknowledgement at the Physics Department within " +
-      cfg.submitWithinDays + " days. Until both are submitted, you are not registered for the Star Party.", CW);
+      cfg.submitWithinDays + " days. Until both are submitted, your registration is not complete.", CW);
     doc.text(note, W / 2, y, { align: "center" });
 
     if (d.test) {
       if (doc.GState) doc.setGState(new doc.GState({ opacity: 0.18 }));
-      doc.setTextColor(200, 30, 30); doc.setFont("helvetica", "bold"); doc.setFontSize(54);
+      doc.setTextColor(120, 120, 120); doc.setFont("helvetica", "bold"); doc.setFontSize(54);
       doc.text("TEST ONLY", W / 2, 150, { align: "center", angle: 30 });
       if (doc.GState) doc.setGState(new doc.GState({ opacity: 1 }));
     }
-    doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(150, 155, 170);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(110, 110, 110);
     doc.text("Generated online on " + d.submittedAt + " for registration " + d.id + ".", W / 2, 293.5, { align: "center" });
     return doc;
   };
