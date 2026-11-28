@@ -45,6 +45,12 @@ window.SITE_CONFIG = {
     note: "Pay the fee at the Physics Department office and get this acknowledgement signed by the clerk."
   },
 
+  // WhatsApp group shown to course registrants (after registering and on the acknowledgement)
+  whatsappGroup: {
+    name: "BKBCK Astronomy Certificate Course - 2026-27",
+    url: "https://chat.whatsapp.com/LZm8DtittVtBi0JoHMf2Fa"
+  },
+
   // Submit the printed acknowledgement at the Physics Department within this many days
   submitWithinDays: 7,
 

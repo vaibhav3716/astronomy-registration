@@ -202,7 +202,7 @@
     </div>
     <div id="previousBanner" class="banner banner-info" hidden>
       You have already registered from this device (<b id="prevId"></b>).
-      Download again: <button type="button" class="link-btn" id="prevDownload">acknowledgement</button><span id="prevConsentWrap"> &middot; <button type="button" class="link-btn" id="prevConsent">parental consent form</button></span>
+      Download again: <button type="button" class="link-btn" id="prevDownload">acknowledgement</button><span id="prevWaWrap" hidden> &middot; <a class="link-btn" id="prevWa" href="#" target="_blank" rel="noopener">join the course WhatsApp group</a></span><span id="prevConsentWrap"> &middot; <button type="button" class="link-btn" id="prevConsent">parental consent form</button></span>
     </div>
 
     <div id="demoBar" class="banner banner-demo" hidden>
@@ -392,6 +392,14 @@
     <button type="button" class="btn btn-gold btn-block" id="ackDownload">1. Download acknowledgement (PDF)</button>
     <button type="button" class="btn btn-gold btn-block" id="consentDownload">2. Download parental consent form (PDF)</button>
     <button type="button" class="btn btn-ghost btn-block" id="ackClose" disabled>Close</button>
+    <div id="waBlock" class="wa-block" hidden>
+      <p class="wa-title">Join the course WhatsApp group</p>
+      <p class="tiny" id="waName"></p>
+      <div id="waQR" class="wa-qr"></div>
+      <a id="waLink" class="btn btn-wa" href="#" target="_blank" rel="noopener">Join on WhatsApp</a>
+      <p class="tiny">Scan the QR code with your phone camera, or tap the button.</p>
+    </div>
+    <p id="waCash" class="wa-cash" hidden>After you pay the fee at the Physics Department, the office will give you the QR code to join the course WhatsApp group.</p>
     <p class="tiny" id="ackCloseHint">You can close this window after downloading both.</p>
   </div>
 </div>

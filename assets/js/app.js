@@ -310,6 +310,7 @@
     $("#consentDownload").hidden = !consent;
     $("#ackDownload").textContent = consent ? "1. Download acknowledgement (PDF)" : "Download acknowledgement (PDF)";
     showConsent($("#ackModal"), consent);
+    showWhatsApp(data);
     form.reset(); if (!TRIP_OPEN) $("#optCourse").checked = true; update();
     $$("input, select, button", form).forEach(el => el.disabled = true);
     $("#ackId").textContent = data.id;
@@ -332,6 +333,21 @@
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !allGot()) e.preventDefault(); });
 
+  /* ---------- course WhatsApp group (course registrants only) ---------- */
+  const wa = cfg.whatsappGroup;
+  function showWhatsApp(data) {
+    const course = !!(wa && wa.url && data.programmes && data.programmes.course);
+    // the group link is given only once the fee is paid: online payers now, cash payers at the office
+    const on = course && data.paymentMode === "online";
+    $("#waBlock").hidden = !on;
+    $("#waCash").hidden = !(course && data.paymentMode === "cash");
+    if (!on) return;
+    $("#waName").textContent = wa.name;
+    $("#waLink").href = wa.url;
+    const q = qrcode(0, "M"); q.addData(wa.url); q.make();
+    $("#waQR").innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+  }
+
   /* ---------- registered earlier on this device ---------- */
   function showPrevious() {
     let prev = null;
@@ -342,6 +358,7 @@
     $("#prevDownload").onclick = () => { makeDocs(prev); docs.ack.save(docs.ackName); };
     $("#prevConsent").onclick = () => { makeDocs(prev); if (docs.consent) docs.consent.save(docs.consentName); };
     $("#prevConsentWrap").hidden = !needsConsent(prev);
+    if (wa && wa.url && prev.programmes && prev.programmes.course && prev.paymentMode === "online") { $("#prevWa").href = wa.url; $("#prevWaWrap").hidden = false; }
   }
   showPrevious();
   update();

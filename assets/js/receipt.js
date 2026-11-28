@@ -159,10 +159,21 @@
     } else {
       steps.push("Until both the acknowledgement and the signed consent form are submitted, you are NOT registered for the Star Party.");
     }
+    // course registrants: WhatsApp group QR beside the steps
+    const wa = cfg.whatsappGroup, showWa = !!(wa && wa.url && d.programmes.course && d.paymentMode === "online");
+    if (showWa) steps.push("Join the course WhatsApp group for class updates: scan the QR code on the right or open " + wa.url);
+    const stepsTop = y, stepW = showWa ? CW - 30 : CW;
     steps.forEach((s, i) => {
-      const lines = doc.splitTextToSize((i + 1) + ". " + s, CW);
+      const lines = doc.splitTextToSize((i + 1) + ". " + s, stepW);
       doc.text(lines, M, y); y += lines.length * 4.1 + 0.8;
     });
+    if (showWa) {
+      const qs = 24, qx = W - M - qs, qy = stepsTop - 6;
+      drawQR(doc, wa.url, qx, qy, qs);
+      doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(18, 140, 74);
+      doc.text("WhatsApp group", qx + qs / 2, qy + qs + 3, { align: "center" });
+      y = Math.max(y, qy + qs + 5);
+    }
 
     // cut line
     y = Math.max(y + 3, 230);
