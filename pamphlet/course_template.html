@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Astronomy Certificate Course | Department of Physics, B. K. Birla College, Kalyan</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --indigo: #1F2A6B; --night: #070B22; --teal: #00838F; --gold: #F5B845; --slate: #4f5b70; --pale: #eef1fb; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Fira Sans", sans-serif; color: #1d2233; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 210mm; height: 297mm; position: relative; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
+
+  /* college band */
+  .band { background: #fff; padding: 3mm 8mm 2.5mm; text-align: center; border-bottom: 1.2mm solid var(--gold); }
+  .band img { width: 100%; height: auto; display: block; }
+
+  /* hero */
+  .hero { position: relative; color: #fff; padding: 8mm 12mm 8mm; flex: 1;
+          background: linear-gradient(180deg, rgba(7,11,34,.35), rgba(7,11,34,.55) 45%, rgba(7,11,34,.95)), url("../assets/img/hero-star-trails.jpg") center 35% / cover; }
+  .eyebrow { font-weight: 700; letter-spacing: .22em; font-size: 10.5pt; color: var(--gold); text-transform: uppercase; }
+  h1 { font-family: "Lora", serif; line-height: .92; margin: 1mm 0 2.5mm; letter-spacing: -.5pt; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
+  h1 .line { display: inline-block; white-space: nowrap; font-size: 46pt; }
+  h1 .gold { color: var(--gold); }
+  .tagline { font-size: 14pt; font-weight: 500; margin: 0 0 3.5mm; max-width: 150mm; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+  .tagline b { color: var(--gold); }
+  .chips { display: flex; flex-wrap: wrap; gap: 2.5mm; }
+  .chip { background: rgba(255,255,255,.14); border: .3mm solid rgba(255,255,255,.4); border-radius: 20mm; padding: 1.3mm 3.4mm; font-size: 10pt; font-weight: 500; }
+  .credit { position: absolute; right: 4mm; bottom: 1mm; font-size: 5.5pt; color: rgba(255,255,255,.55); }
+
+  /* body */
+  .body { flex: 1; padding: 6mm 12mm 0; display: flex; flex-direction: column; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .card { border-radius: 4mm; padding: 4mm 5mm 3.5mm; position: relative; }
+  .card.course { background: var(--pale); border: .5mm solid var(--indigo); }
+  .card.party { background: #fff8e6; border: .5mm solid var(--gold); }
+  .card h2 { margin: 0; font-size: 15pt; color: var(--indigo); }
+  .card .sub { font-size: 11pt; font-weight: 600; color: var(--teal); margin: .5mm 0 2mm; }
+  .card .price { font-family: "Lora", serif; font-size: 22pt; font-weight: 700; color: var(--indigo); margin: .5mm 0 1.5mm; }
+  .card .price small { font-family: "Fira Sans"; font-size: 10pt; font-weight: 600; color: var(--teal); }
+  .card ul { margin: 0; padding-left: 4.5mm; font-size: 10pt; line-height: 1.32; }
+  .card li::marker { color: var(--teal); }
+  .badge { position: absolute; top: -3.2mm; right: 4mm; background: var(--indigo); color: #fff; font-size: 8.5pt; font-weight: 700; padding: .8mm 3mm; border-radius: 10mm; letter-spacing: .05em; }
+  .party .badge { background: var(--gold); color: var(--night); }
+
+  .facts { display: grid; grid-template-columns: 1.1fr 1.5fr 1fr 1.1fr; gap: 3mm; margin: 4mm 0 6mm; }
+  .fact { border-left: 1mm solid var(--teal); padding: 1mm 0 1mm 3mm; }
+  .fact span { display: block; font-size: 7.8pt; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; }
+  .fact b { font-size: 10.3pt; font-weight: 600; line-height: 1.25; display: block; }
+
+  .register { margin-top: auto; margin-bottom: 4mm; display: flex; align-items: center; gap: 5mm; background: var(--night); color: #fff; border-radius: 5mm; padding: 4mm 6mm; }
+  .qr-col { flex: none; text-align: center; font-size: 8.5pt; font-weight: 600; color: var(--gold); }
+  .qr-col span { display: block; margin-top: 1.5mm; }
+  .qr { width: 31mm; height: 31mm; background: #fff; border-radius: 2.5mm; padding: 2mm; }
+  .qr-col.small .qr { width: 25mm; height: 25mm; }
+  .qr svg { width: 100%; height: 100%; display: block; }
+  .reg-text h3 { margin: 0 0 1.5mm; font-family: "Lora", serif; font-size: 18pt; color: var(--gold); }
+  .reg-text p { margin: 0 0 1.2mm; font-size: 10pt; line-height: 1.35; }
+  .url { font-family: ui-monospace, Menlo, monospace; font-size: 10pt; color: #9fe3e8; word-break: break-all; }
+  .note { font-size: 8.8pt; color: #c9cfef; }
+
+  .footer { background: var(--indigo); color: #e6e9fa; padding: 3.5mm 12mm; display: flex; justify-content: space-between; align-items: center; font-size: 9.2pt; }
+  .footer b { color: var(--gold); }
+
+  .units { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+  .unit { border-radius: 4mm; overflow: hidden; border: .4mm solid #d5dbef; background: var(--pale); }
+  .unit .img { height: 17mm; background-size: cover; background-position: center; }
+  .unit .txt { padding: 2.5mm 3.5mm 3mm; }
+  .unit .no { font-size: 8pt; font-weight: 700; color: var(--teal); letter-spacing: .12em; text-transform: uppercase; }
+  .unit h2 { margin: .3mm 0 1.5mm; font-size: 11.5pt; line-height: 1.15; color: var(--indigo); }
+  .unit ul { margin: 0; padding-left: 4mm; font-size: 8.9pt; line-height: 1.3; }
+  .unit li::marker { color: var(--teal); }
+  .perks { display: flex; flex-wrap: wrap; gap: 2mm; margin: 4mm 0 0; }
+  .perk { background: #fff; border: .35mm solid var(--indigo); color: var(--indigo); border-radius: 20mm; padding: 1mm 3mm; font-size: 9pt; font-weight: 600; }
+  .party-strip { margin-top: 4mm; border: .5mm solid var(--gold); background: #fff8e6; border-radius: 4mm; padding: 3mm 5mm; display: flex; gap: 5mm; align-items: center; }
+  .party-strip .tag { flex: none; background: var(--gold); color: var(--night); font-weight: 800; font-size: 8.5pt; padding: 1mm 3mm; border-radius: 10mm; letter-spacing: .05em; }
+  .party-strip h3 { margin: 0 0 .5mm; font-size: 12.5pt; color: var(--indigo); }
+  .party-strip p { margin: 0; font-size: 9.2pt; line-height: 1.32; }
+  .party-strip .tent { color: #B26A00; font-weight: 700; }
+  .facts.course { grid-template-columns: 1fr 1.6fr 1.3fr 1.1fr; margin: 3.5mm 0 0; }
+  .page .register { margin-top: 4mm; }
+  .hero h1 .line { font-size: 42pt; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="band"><img src="../assets/img/bkbc-logo.jpg" alt="B. K. Birla College of Arts, Science & Commerce, Kalyan"></div>
+
+  <div class="hero" style="flex:none; padding-top:6mm; padding-bottom:6mm">
+    <div class="eyebrow">Department of Physics presents</div>
+    <h1><span class="line">Astronomy</span><br><span class="line gold">Certificate Course</span></h1>
+    <p class="tagline">From <i>"why do the stars move?"</i> to finding galaxies with a telescope yourself. <b>No prior astronomy needed. Registrations now open!</b></p>
+    <div class="chips">
+      <span class="chip">&#127769; Moon phases &amp; eclipses</span>
+      <span class="chip">&#9728;&#65039; Seasons &amp; Zero Shadow Day</span>
+      <span class="chip">&#128197; Panchang &amp; calendars</span>
+      <span class="chip">&#10024; Constellations &amp; Indian star names</span>
+      <span class="chip">&#128301; Hands-on telescopes</span>
+      <span class="chip">&#127756; Nebulae, clusters &amp; galaxies</span>
+    </div>
+    <div class="credit">Photo: International Gemini Observatory/NOIRLab/NSF/AURA/T. Matsopoulos (CC BY 4.0)</div>
+  </div>
+
+  <div class="body" style="padding-top:4.5mm">
+    <div class="units">
+      <div class="unit"><div class="img" style="background-image:url('../assets/img/orion-art.jpg')"></div><div class="txt">
+        <div class="no">Unit 1</div><h2>Motion of the Sky and Time-Keeping</h2>
+        <ul><li>Rising and setting, finding Polaris</li><li>Seasons, equinoxes, solstices</li><li>Moon phases and eclipses</li><li>Panchang and Makar Sankranti</li></ul></div></div>
+      <div class="unit"><div class="img" style="background-image:url('../assets/img/winter-hops.jpg')"></div><div class="txt">
+        <div class="no">Unit 2</div><h2>Sky, Stars and Constellations</h2>
+        <ul><li>Celestial sphere and coordinates</li><li>Constellations through history</li><li>Brightest stars, Indian names</li><li>Star-hopping and sky charts</li></ul></div></div>
+      <div class="unit"><div class="img" style="background-image:url('../assets/img/telescope.jpg')"></div><div class="txt">
+        <div class="no">Unit 3</div><h2>Magnitudes, Telescopes and Catalogues</h2>
+        <ul><li>How bright stars really are</li><li>How telescopes work</li><li>Set up and use a telescope</li><li>Messier and NGC objects</li></ul></div></div>
+    </div>
+
+    <div class="perks">
+      <span class="perk">&#128214; Illustrated lecture notes</span>
+      <span class="perk">&#129513; Quizzes &amp; sky puzzles</span>
+      <span class="perk">&#127773; Observing projects</span>
+      <span class="perk">&#127891; Certificate*</span>
+    </div>
+
+    <div class="facts course">
+      <div class="fact"><span>Starts</span><b>To be announced</b></div>
+      <div class="fact"><span>Format</span><b>Weekly sessions + observing nights</b></div>
+      <div class="fact"><span>Venue</span><b>Department of Physics, B. K. Birla College</b></div>
+      <div class="fact"><span>Open to</span><b>All students and teachers</b></div>
+    </div>
+
+    <div class="party-strip">
+      <span class="tag">INCLUDED</span>
+      <div>
+        <h3>&#10022; Star Party: a night of stargazing</h3>
+        <p>Telescopes, a laser sky tour, an astronomy quiz, night games and guitars.<br>
+        Date: <b>To be announced</b> &middot; Venue: <b>Atma Malik Institute, Mohili-Aghai, Shahapur</b> <span class="tent">(Tentative)</span></p>
+      </div>
+    </div>
+
+    <div class="register">
+      <div class="qr-col"><div class="qr">{{QR_SVG}}</div><span>Scan to register</span></div>
+      <div class="reg-text">
+        <h3>Register now!</h3>
+        <p>Scan the QR code for fees, full details and the registration form. Pay online (UPI) or in cash at the Physics Department.</p>
+        <p class="url">{{URL}}</p>
+        <p class="note">*Certificate after attending the lectures and appearing for the final exam.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Organised by the <b>Department of Physics</b>, B. K. Birla College of Arts, Science &amp; Commerce, Kalyan</span>
+    <span>{{CONTACT}}</span>
+  </div>
+</div>
+</body>
+</html>
