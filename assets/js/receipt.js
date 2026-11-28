@@ -9,8 +9,8 @@
   function programmesText(p) {
     const cfg = window.SITE_CONFIG;
     return p.course
-      ? "Astronomy Course (incl. Star Party Near Tansa)  (" + rs(cfg.fees.course) + ")"
-      : "Star Party Near Tansa only (" + rs(cfg.fees.trip) + ")";
+      ? "Astronomy Course (incl. Star Party)  (" + rs(cfg.fees.course) + ")"
+      : "Star Party (Stargazing) only (" + rs(cfg.fees.trip) + ")";
   }
   function programmesShort(p) { return p.course ? "Astronomy Course (incl. Star Party)" : "Star Party (Stargazing) only"; }
 
@@ -52,7 +52,7 @@
     // what they registered for, in bold, right under the heading
     const what = d.programmes.course
       ? "ASTRONOMY COURSE  (incl. Star Party)"
-      : "STAR PARTY NEAR TANSA (STARGAZING TRIP) ONLY";
+      : "STAR PARTY (STARGAZING) ONLY";
     doc.setFillColor(...(d.programmes.course ? INDIGO : GOLD));
     doc.roundedRect(M + 22, y, CW - 44, 8, 2, 2, "F");
     doc.setFont("helvetica", "bold"); doc.setFontSize(11.5); doc.setTextColor(255, 255, 255);
